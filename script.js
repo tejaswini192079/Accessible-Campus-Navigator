@@ -1,4 +1,3 @@
-
 // PATHABLE - ACCESSIBLE CAMPUS NAVIGATOR
 
 const $ = (id) => document.getElementById(id);
