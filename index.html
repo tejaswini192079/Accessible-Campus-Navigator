@@ -1,304 +1,543 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="PathAble helps students find accessible routes around campus.">
+  <meta name="description" content="PathAble - Accessible Campus Navigator">
   <title>PathAble | Accessible Campus Navigator</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <header class="topbar">
-    <a class="brand" href="#home" aria-label="PathAble home">
-      <span class="brand-icon">↗</span>
-      <span>Path<span class="brand-highlight">Able</span><small>ACCESS FOR EVERYONE</small></span>
-    </a>
+<header class="topbar">
+  <a class="brand" href="#home">
+    <span class="brand-icon">↗</span>
+    <span>Path<span class="brand-highlight">Able</span>
+      <small>ACCESS FOR EVERYONE</small>
+    </span>
+  </a>
 
-    <button class="menu-toggle" id="menuToggle" aria-label="Open navigation">☰</button>
+  <button class="menu-toggle" id="menuToggle" aria-label="Open navigation">☰</button>
 
-    <nav class="nav-links" id="navLinks">
-      <a href="#home">Home</a>
-      <a href="#features">Features</a>
-      <a href="#navigator">Route Planner</a>
-      <a href="#accessibility">Accessibility</a>
-      <a href="#facility">Lift Status</a>
-    </nav>
+  <nav class="nav-links" id="navLinks">
+    <a href="#home">Home</a>
+    <a href="#features">Features</a>
+    <a href="#navigator">Route Planner</a>
+    <a href="#campus-life">Campus</a>
+    <a href="#accessibility">Voice Guidance</a>
+    <a href="#voice-recorder">Recorder</a>
+    <a href="#facility">Lift Status</a>
+  </nav>
 
-    <a class="nav-cta" href="#navigator">Plan a Route <span>→</span></a>
-  </header>
+  <a class="nav-cta" href="#navigator">Plan a Route →</a>
+</header>
 
-  <main>
-    <section class="hero" id="home">
-      <div class="hero-overlay"></div>
-      <div class="hero-content">
-        <span class="eyebrow"><span class="live-dot"></span> SMART ACCESSIBLE CAMPUS NAVIGATION</span>
-        <h1>Every step matters.<br><span>Every path is possible.</span></h1>
-        <p>Find accessible campus routes with ramps, working lifts and clear voice guidance. Move around campus with greater confidence.</p>
-        <div class="hero-actions">
-          <a class="button button-primary" href="#navigator">Explore Route Planner <span>→</span></a>
-          <a class="button button-glass" href="#features">Discover Features</a>
+<main>
+
+  <!-- HERO -->
+  <section class="hero" id="home">
+    <div class="hero-overlay"></div>
+
+    <div class="hero-content">
+      <span class="eyebrow">
+        <span class="live-dot"></span>
+        SMART ACCESSIBLE CAMPUS NAVIGATION
+      </span>
+
+      <h1>Every step matters.<br>
+        <span>Every path is possible.</span>
+      </h1>
+
+      <p>
+        Find accessible campus routes with ramps, working lifts
+        and clear voice guidance. Move around campus with
+        greater confidence.
+      </p>
+
+      <div class="hero-actions">
+        <a class="button button-primary" href="#navigator">
+          Explore Route Planner →
+        </a>
+        <a class="button button-glass" href="#features">
+          Discover Features
+        </a>
+      </div>
+
+      <div class="hero-note">
+        ♿ Designed for wheelchair users and visually impaired students
+      </div>
+    </div>
+
+    <div class="hero-card">
+      <div class="hero-card-top">
+        <span class="live-dot"></span> ACCESSIBILITY CHECK
+      </div>
+      <strong>Find a better way.</strong>
+      <div class="hero-card-row"><span>♿ Step-free routes</span><b>✓</b></div>
+      <div class="hero-card-row"><span>↗ Ramp locations</span><b>✓</b></div>
+      <div class="hero-card-row"><span>▣ Lift availability</span><b>✓</b></div>
+      <div class="hero-card-row"><span>🔊 Voice directions</span><b>✓</b></div>
+    </div>
+  </section>
+
+  <!-- TRUST STRIP -->
+  <section class="trust-strip">
+    <div><strong>01</strong><span>Accessible routes</span></div>
+    <div><strong>02</strong><span>Lift status checks</span></div>
+    <div><strong>03</strong><span>Voice navigation</span></div>
+    <div><strong>04</strong><span>Inclusive campus</span></div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="section features-section" id="features">
+    <div class="section-heading">
+      <span class="eyebrow">WHY PATHABLE?</span>
+      <h2>A campus that works<br>for <span>everyone.</span></h2>
+      <p>
+        Normal maps focus on the shortest route.
+        PathAble focuses on whether the route is accessible.
+      </p>
+    </div>
+
+    <div class="feature-grid">
+      <article class="feature-card feature-green">
+        <div class="feature-icon">♿</div>
+        <span class="feature-number">01 / MOBILITY</span>
+        <h3>Step-free routes</h3>
+        <p>Find routes that avoid stairs and use accessible ramps and working lifts.</p>
+        <a href="#navigator">Find accessible paths ↗</a>
+      </article>
+
+      <article class="feature-card feature-purple">
+        <div class="feature-icon">🔊</div>
+        <span class="feature-number">02 / VISION</span>
+        <h3>Voice guidance</h3>
+        <p>Hear directions for corridors, turns, entrances and destinations.</p>
+        <a href="#accessibility">Explore voice support ↗</a>
+      </article>
+
+      <article class="feature-card feature-orange">
+        <div class="feature-icon">🛗</div>
+        <span class="feature-number">03 / FACILITIES</span>
+        <h3>Lift status updates</h3>
+        <p>Check lift availability and recalculate when a lift is unavailable.</p>
+        <a href="#facility">Check lift status ↗</a>
+      </article>
+
+      <article class="feature-card feature-blue">
+        <div class="feature-icon">🗺️</div>
+        <span class="feature-number">04 / WAYFINDING</span>
+        <h3>Campus locations</h3>
+        <p>Identify ramps, lifts, stairs, corridors and accessible entrances.</p>
+        <a href="#navigator">Explore the map ↗</a>
+      </article>
+    </div>
+  </section>
+
+  <!-- REALISTIC CAMPUS PHOTO GALLERY -->
+  <section class="section campus-life" id="campus-life">
+    <div class="section-heading">
+      <span class="eyebrow">EXPLORE CAMPUS SPACES</span>
+      <h2>Every space deserves<br><span>accessible design.</span></h2>
+      <p>Visual examples of campus buildings, learning spaces and corridors.</p>
+    </div>
+
+    <div class="campus-photo-grid">
+      <article class="campus-photo campus-photo-wide">
+        <img
+          src="https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&w=1200&q=85"
+          alt="University campus building">
+        <div>
+          <span>01 · CAMPUS</span>
+          <h3>Know your surroundings</h3>
         </div>
-        <div class="hero-note">
-          <span>♿</span> Designed for wheelchair users and visually impaired students
+      </article>
+
+      <article class="campus-photo">
+        <img
+          src="https://images.unsplash.com/photo-1564981797816-1043664bf78d?auto=format&fit=crop&w=900&q=85"
+          alt="University library">
+        <div>
+          <span>02 · LEARNING</span>
+          <h3>Find learning spaces</h3>
+        </div>
+      </article>
+
+      <article class="campus-photo">
+        <img
+          src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=900&q=85"
+          alt="Modern indoor corridor">
+        <div>
+          <span>03 · WAYFINDING</span>
+          <h3>Move with confidence</h3>
+        </div>
+      </article>
+    </div>
+
+    <p class="image-disclaimer">
+      Illustrative campus photographs. These are not verified photographs
+      of your actual college or accessible facilities.
+    </p>
+  </section>
+
+  <!-- ROUTE PLANNER -->
+  <section class="section planner-section" id="navigator">
+    <div class="section-heading planner-heading">
+      <span class="eyebrow">YOUR JOURNEY STARTS HERE</span>
+      <h2>Find your <span>accessible route.</span></h2>
+      <p>
+        Try our campus demonstration: travel from the main entrance
+        to a classroom on the second floor.
+      </p>
+    </div>
+
+    <div class="planner-layout">
+      <div class="planner-panel">
+        <div class="panel-title">
+          <div>
+            <span class="mini-label">ROUTE PLANNER</span>
+            <h3>Plan your journey</h3>
+          </div>
+          <span class="demo-tag">DEMO CAMPUS</span>
+        </div>
+
+        <label for="startLocation">Starting location</label>
+        <div class="location-input">
+          <span class="location-dot start-dot"></span>
+          <select id="startLocation">
+            <option value="entrance">Main Entrance</option>
+            <option value="groundHall">Ground Floor Corridor</option>
+            <option value="rampJunction">Ramp Junction</option>
+            <option value="liftLobby">Lift Lobby</option>
+            <option value="firstLanding">First Floor Landing</option>
+            <option value="secondHall">Second Floor Corridor</option>
+          </select>
+        </div>
+
+        <button class="swap-button" id="swapButton" type="button">
+          ↕ Swap locations
+        </button>
+
+        <label for="endLocation">Destination</label>
+        <div class="location-input">
+          <span class="location-dot end-dot"></span>
+          <select id="endLocation">
+            <option value="room204" selected>Room 204 – Second Floor</option>
+            <option value="library">Library – Ground Floor</option>
+            <option value="office">Student Office – First Floor</option>
+            <option value="liftLobby">Lift Lobby</option>
+            <option value="groundHall">Ground Floor Corridor</option>
+          </select>
+        </div>
+
+        <div class="preference-box">
+          <h4>Travel preferences</h4>
+
+          <label class="check-row">
+            <input type="checkbox" id="wheelchairMode" checked>
+            <span class="custom-check"></span>
+            <span>
+              <strong>Step-free route</strong>
+              <small>Avoid stairs and inaccessible paths</small>
+            </span>
+          </label>
+
+          <label class="check-row">
+            <input type="checkbox" id="voiceMode">
+            <span class="custom-check"></span>
+            <span>
+              <strong>Voice guidance</strong>
+              <small>Read directions aloud when available</small>
+            </span>
+          </label>
+        </div>
+
+        <button class="button button-primary find-button" id="findRouteButton" type="button">
+          Find My Route →
+        </button>
+
+        <button class="text-button" id="resetButton" type="button">
+          ↺ Reset planner
+        </button>
+
+        <p class="small-note">
+          This is a sample campus network for demonstration,
+          not live campus navigation.
+        </p>
+      </div>
+
+      <div class="map-panel">
+        <div class="map-header">
+          <div>
+            <span class="mini-label">CAMPUS OVERVIEW</span>
+            <h3>Accessible campus map</h3>
+          </div>
+          <span class="map-status">
+            <span class="live-dot"></span> Demo map
+          </span>
+        </div>
+
+        <div class="map-legend">
+          <span><i class="legend-ramp"></i> Ramp</span>
+          <span><i class="legend-lift"></i> Lift</span>
+          <span><i class="legend-stairs"></i> Stairs</span>
+          <span><i class="legend-route"></i> Selected route</span>
+        </div>
+
+        <div class="campus-map" id="campusMap" aria-label="Illustrative campus map">
+          <div class="map-road road-top"></div>
+          <div class="map-road road-bottom"></div>
+
+          <div class="map-building building-a"><span>MAIN BUILDING</span></div>
+          <div class="map-building building-b"><span>CLASSROOM WING</span></div>
+          <div class="map-building building-c"><span>LIBRARY</span></div>
+
+          <button class="map-point point-entrance" data-location="entrance" type="button"><span>🚪</span><small>Entrance</small></button>
+          <button class="map-point point-ramp" data-location="rampJunction" type="button"><span>♿</span><small>Ramp</small></button>
+          <button class="map-point point-lift" data-location="liftLobby" type="button"><span>🛗</span><small>Lift</small></button>
+          <button class="map-point point-ground" data-location="groundHall" type="button"><span>📍</span><small>Ground Hall</small></button>
+          <button class="map-point point-first" data-location="firstLanding" type="button"><span>1F</span><small>First Floor</small></button>
+          <button class="map-point point-second" data-location="secondHall" type="button"><span>2F</span><small>Second Floor</small></button>
+          <button class="map-point point-room" data-location="room204" type="button"><span>🚩</span><small>Room 204</small></button>
+          <button class="map-point point-library" data-location="library" type="button"><span>📚</span><small>Library</small></button>
+          <button class="map-point point-office" data-location="office" type="button"><span>🏢</span><small>Office</small></button>
+
+          <svg class="route-lines" viewBox="0 0 600 360" preserveAspectRatio="none" aria-hidden="true">
+            <path class="map-path" d="M70 180 L170 180 L270 180 L390 180 L470 180 L530 180"/>
+            <path class="map-path stairs-path" d="M270 180 L330 90 L470 90 L530 180"/>
+            <path class="active-route" id="activeRouteLine" d=""/>
+          </svg>
+        </div>
+
+        <p class="map-hint">Select a map marker to use it as your starting point.</p>
+      </div>
+    </div>
+
+    <div class="route-result" id="routeResult" aria-live="polite">
+      <div class="result-placeholder">
+        <span class="placeholder-icon">🧭</span>
+        <div>
+          <strong>Your route will appear here</strong>
+          <p>Select your starting point and destination, then press Find My Route.</p>
         </div>
       </div>
-      <div class="hero-card">
-        <div class="hero-card-top"><span class="live-dot"></span> ACCESSIBILITY CHECK</div>
-        <strong>Find a better way.</strong>
-        <div class="hero-card-row"><span>♿ Step-free routes</span><b>✓</b></div>
-        <div class="hero-card-row"><span>↗ Ramp locations</span><b>✓</b></div>
-        <div class="hero-card-row"><span>▣ Lift availability</span><b>✓</b></div>
-        <div class="hero-card-row"><span>🔊 Voice directions</span><b>✓</b></div>
+    </div>
+  </section>
+
+  <!-- VOICE GUIDANCE -->
+  <section class="section accessibility-section" id="accessibility">
+    <div class="accessibility-copy">
+      <span class="eyebrow">INCLUSIVE BY DESIGN</span>
+      <h2>Navigation you can<br><span>hear and understand.</span></h2>
+
+      <p>
+        Students who have difficulty seeing a screen can use spoken
+        directions. Each instruction explains the next corridor,
+        turn or destination in simple language.
+      </p>
+
+      <ul class="benefit-list">
+        <li><span>✓</span> Spoken turn-by-turn instructions</li>
+        <li><span>✓</span> Clear corridor and room descriptions</li>
+        <li><span>✓</span> Repeat directions whenever needed</li>
+        <li><span>✓</span> High contrast and larger text options</li>
+      </ul>
+    </div>
+
+    <div class="voice-card">
+      <div class="voice-card-top">
+        <span class="voice-icon">🔊</span>
+        <span class="demo-tag">VOICE DEMO</span>
       </div>
-    </section>
 
-    <section class="trust-strip">
-      <div><strong>01</strong><span>Accessible routes</span></div>
-      <div><strong>02</strong><span>Lift status checks</span></div>
-      <div><strong>03</strong><span>Voice navigation</span></div>
-      <div><strong>04</strong><span>Inclusive campus</span></div>
-    </section>
+      <span class="mini-label">SAMPLE NAVIGATION INSTRUCTION</span>
+      <h3 id="voiceSample">
+        “Continue through the ground floor corridor towards the lift lobby.”
+      </h3>
 
-    <section class="section features-section" id="features">
+      <div class="voice-wave" aria-hidden="true">
+        <i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+        <i></i><i></i><i></i><i></i><i></i><i></i>
+      </div>
+
+      <div class="voice-actions">
+        <button class="button button-primary" id="playVoiceButton" type="button">
+          ▶ Play sample
+        </button>
+        <button class="button button-light" id="stopVoiceButton" type="button">
+          Stop
+        </button>
+      </div>
+
+      <p class="small-note">
+        Spoken guidance uses your browser's speech feature.
+      </p>
+    </div>
+  </section>
+
+  <!-- NEW MICROPHONE RECORDER -->
+  <section class="section recorder-section" id="voice-recorder">
+    <div class="recorder-intro">
+      <span class="eyebrow">VOICE NOTES · ACCESSIBILITY SUPPORT</span>
+      <h2>Speak it.<br><span>Save it.</span></h2>
+
+      <p>
+        Record a short voice note about a campus access issue,
+        a helpful landmark, or a route reminder. Listen to your
+        recording and download it.
+      </p>
+
+      <div class="recorder-note">
+        <span>🔒</span>
+        Your audio stays in this browser. This demo does not
+        upload your recording to a server.
+      </div>
+    </div>
+
+    <div class="recorder-card">
+      <div class="recorder-card-head">
+        <div>
+          <span class="mini-label">MICROPHONE STUDIO</span>
+          <h3>Voice Recorder</h3>
+        </div>
+        <span class="recording-status" id="recordingStatus">
+          <i></i> Ready
+        </span>
+      </div>
+
+      <div class="recorder-visual" id="recorderVisual" aria-hidden="true">
+        <span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span><span></span>
+        <span></span>
+      </div>
+
+      <div class="recording-time" id="recordingTime">00:00</div>
+
+      <p class="recorder-help" id="recorderHelp" aria-live="polite">
+        Allow microphone access when your browser asks.
+        Then press Start Recording.
+      </p>
+
+      <div class="recorder-controls">
+        <button class="button button-primary" id="recordStartButton" type="button">
+          ● Start Recording
+        </button>
+        <button class="button button-light" id="recordPauseButton" type="button" disabled>
+          Ⅱ Pause
+        </button>
+        <button class="button button-light" id="recordStopButton" type="button" disabled>
+          ■ Stop
+        </button>
+      </div>
+
+      <audio id="recordingPlayback" class="recording-playback" controls hidden></audio>
+
+      <div class="recorder-bottom">
+        <button class="text-button" id="recordDownloadButton" type="button" disabled>
+          ↓ Download recording
+        </button>
+        <button class="text-button" id="recordClearButton" type="button" disabled>
+          Clear recording
+        </button>
+      </div>
+
+      <p class="small-note">
+        Recording requires microphone permission and HTTPS or localhost.
+      </p>
+    </div>
+  </section>
+
+  <!-- LIFT STATUS -->
+  <section class="section facility-section" id="facility">
+    <div class="facility-heading">
       <div class="section-heading">
-        <span class="eyebrow">WHY PATHABLE?</span>
-        <h2>A campus that works<br>for <span>everyone.</span></h2>
-        <p>Normal maps focus on the shortest route. PathAble focuses on whether the route is accessible.</p>
+        <span class="eyebrow">FACILITY MONITORING</span>
+        <h2>Check before<br><span>you travel.</span></h2>
+        <p>
+          A lift may become unavailable. PathAble demonstrates
+          how the route can be recalculated using the updated facility status.
+        </p>
       </div>
 
-      <div class="feature-grid">
-        <article class="feature-card feature-green">
-          <div class="feature-icon">♿</div>
-          <span class="feature-number">01 / MOBILITY</span>
-          <h3>Step-free routes</h3>
-          <p>Find routes that avoid stairs and use accessible ramps and working lifts.</p>
-          <a href="#navigator">Find accessible paths ↗</a>
-        </article>
-
-        <article class="feature-card feature-purple">
-          <div class="feature-icon">🔊</div>
-          <span class="feature-number">02 / VISION</span>
-          <h3>Voice guidance</h3>
-          <p>Hear directions for corridors, turns, entrances and destinations.</p>
-          <a href="#accessibility">Explore voice support ↗</a>
-        </article>
-
-        <article class="feature-card feature-orange">
-          <div class="feature-icon">🛗</div>
-          <span class="feature-number">03 / FACILITIES</span>
-          <h3>Lift status updates</h3>
-          <p>Check lift availability and recalculate when a lift is unavailable.</p>
-          <a href="#facility">Check lift status ↗</a>
-        </article>
-
-        <article class="feature-card feature-blue">
-          <div class="feature-icon">🗺️</div>
-          <span class="feature-number">04 / WAYFINDING</span>
-          <h3>Campus locations</h3>
-          <p>Identify ramps, lifts, stairs, corridors and accessible entrances.</p>
-          <a href="#navigator">Explore the map ↗</a>
-        </article>
+      <div class="facility-alert">
+        <span>ⓘ</span>
+        <p>
+          <strong>Demo status control</strong><br>
+          Use the button below to simulate a lift breakdown
+          and test the alternative route.
+        </p>
       </div>
-    </section>
+    </div>
 
-    <section class="section planner-section" id="navigator">
-      <div class="section-heading planner-heading">
-        <span class="eyebrow">YOUR JOURNEY STARTS HERE</span>
-        <h2>Find your <span>accessible route.</span></h2>
-        <p>Try our campus demonstration: travel from the main entrance to a classroom on the second floor.</p>
+    <div class="lift-card">
+      <div class="lift-symbol">🛗</div>
+
+      <div class="lift-info">
+        <span class="mini-label">MAIN BUILDING · LIFT 01</span>
+        <h3>Central Passenger Lift</h3>
+        <p id="liftDescription">
+          The lift is currently marked as operational in this demonstration.
+        </p>
       </div>
 
-      <div class="planner-layout">
-        <div class="planner-panel">
-          <div class="panel-title">
-            <div>
-              <span class="mini-label">ROUTE PLANNER</span>
-              <h3>Plan your journey</h3>
-            </div>
-            <span class="demo-tag">DEMO CAMPUS</span>
-          </div>
-
-          <label for="startLocation">Starting location</label>
-          <div class="location-input">
-            <span class="location-dot start-dot"></span>
-            <select id="startLocation">
-              <option value="entrance">Main Entrance</option>
-              <option value="groundHall">Ground Floor Corridor</option>
-              <option value="rampJunction">Ramp Junction</option>
-              <option value="liftLobby">Lift Lobby</option>
-              <option value="firstLanding">First Floor Landing</option>
-              <option value="secondHall">Second Floor Corridor</option>
-            </select>
-          </div>
-
-          <button class="swap-button" id="swapButton" type="button" aria-label="Swap start and destination">↕ Swap locations</button>
-
-          <label for="endLocation">Destination</label>
-          <div class="location-input">
-            <span class="location-dot end-dot"></span>
-            <select id="endLocation">
-              <option value="room204" selected>Room 204 – Second Floor</option>
-              <option value="library">Library – Ground Floor</option>
-              <option value="office">Student Office – First Floor</option>
-              <option value="liftLobby">Lift Lobby</option>
-              <option value="groundHall">Ground Floor Corridor</option>
-            </select>
-          </div>
-
-          <div class="preference-box">
-            <h4>Travel preferences</h4>
-            <label class="check-row">
-              <input type="checkbox" id="wheelchairMode" checked>
-              <span class="custom-check"></span>
-              <span><strong>Step-free route</strong><small>Avoid stairs and inaccessible paths</small></span>
-            </label>
-            <label class="check-row">
-              <input type="checkbox" id="voiceMode">
-              <span class="custom-check"></span>
-              <span><strong>Voice guidance</strong><small>Read directions aloud when available</small></span>
-            </label>
-          </div>
-
-          <button class="button button-primary find-button" id="findRouteButton" type="button">Find My Route <span>→</span></button>
-          <button class="text-button" id="resetButton" type="button">↺ Reset planner</button>
-          <p class="small-note">This is a sample campus network for demonstration, not live campus navigation.</p>
-        </div>
-
-        <div class="map-panel">
-          <div class="map-header">
-            <div><span class="mini-label">CAMPUS OVERVIEW</span><h3>Accessible campus map</h3></div>
-            <span class="map-status"><span class="live-dot"></span> Demo map</span>
-          </div>
-
-          <div class="map-legend">
-            <span><i class="legend-ramp"></i> Ramp</span>
-            <span><i class="legend-lift"></i> Lift</span>
-            <span><i class="legend-stairs"></i> Stairs</span>
-            <span><i class="legend-route"></i> Selected route</span>
-          </div>
-
-          <div class="campus-map" id="campusMap" aria-label="Illustrative campus map">
-            <div class="map-road road-top"></div>
-            <div class="map-road road-bottom"></div>
-            <div class="map-building building-a"><span>MAIN BUILDING</span></div>
-            <div class="map-building building-b"><span>CLASSROOM WING</span></div>
-            <div class="map-building building-c"><span>LIBRARY</span></div>
-
-            <button class="map-point point-entrance" data-location="entrance" type="button"><span>🚪</span><small>Entrance</small></button>
-            <button class="map-point point-ramp" data-location="rampJunction" type="button"><span>♿</span><small>Ramp</small></button>
-            <button class="map-point point-lift" data-location="liftLobby" type="button"><span>🛗</span><small>Lift</small></button>
-            <button class="map-point point-ground" data-location="groundHall" type="button"><span>📍</span><small>Ground Hall</small></button>
-            <button class="map-point point-first" data-location="firstLanding" type="button"><span>1F</span><small>First Floor</small></button>
-            <button class="map-point point-second" data-location="secondHall" type="button"><span>2F</span><small>Second Floor</small></button>
-            <button class="map-point point-room" data-location="room204" type="button"><span>🚩</span><small>Room 204</small></button>
-            <button class="map-point point-library" data-location="library" type="button"><span>📚</span><small>Library</small></button>
-            <button class="map-point point-office" data-location="office" type="button"><span>🏢</span><small>Office</small></button>
-
-            <svg class="route-lines" viewBox="0 0 600 360" preserveAspectRatio="none" aria-hidden="true">
-              <path class="map-path" d="M70 180 L170 180 L270 180 L390 180 L470 180 L530 180"/>
-              <path class="map-path stairs-path" d="M270 180 L330 90 L470 90 L530 180"/>
-              <path class="active-route" id="activeRouteLine" d=""/>
-            </svg>
-          </div>
-          <p class="map-hint">Select a map marker to use it as your starting point.</p>
-        </div>
+      <div class="lift-state">
+        <span class="status-pill status-working" id="liftStatus">● Working</span>
+        <button class="button button-light" id="toggleLiftButton" type="button">
+          Simulate breakdown
+        </button>
       </div>
+    </div>
 
-      <div class="route-result" id="routeResult" aria-live="polite">
-        <div class="result-placeholder">
-          <span class="placeholder-icon">🧭</span>
-          <div><strong>Your route will appear here</strong><p>Select your starting point and destination, then press Find My Route.</p></div>
-        </div>
-      </div>
-    </section>
+    <p class="small-note facility-note">
+      This button changes the local demo status only.
+      It does not connect to a real lift or notify campus staff.
+    </p>
+  </section>
 
-    <section class="section accessibility-section" id="accessibility">
-      <div class="accessibility-copy">
-        <span class="eyebrow">INCLUSIVE BY DESIGN</span>
-        <h2>Navigation you can<br><span>hear and understand.</span></h2>
-        <p>Students who have difficulty seeing a screen can use spoken directions. Each instruction explains the next corridor, turn or destination in simple language.</p>
-        <ul class="benefit-list">
-          <li><span>✓</span> Spoken turn-by-turn instructions</li>
-          <li><span>✓</span> Clear corridor and room descriptions</li>
-          <li><span>✓</span> Repeat directions whenever needed</li>
-          <li><span>✓</span> High contrast and larger text options</li>
-        </ul>
-      </div>
+  <!-- FINAL CTA -->
+  <section class="cta-section">
+    <div>
+      <span class="eyebrow">A MORE INCLUSIVE TOMORROW</span>
+      <h2>Accessibility is not<br>an extra. It is essential.</h2>
+      <p>PathAble helps make campus navigation more thoughtful, clear and inclusive.</p>
+    </div>
 
-      <div class="voice-card">
-        <div class="voice-card-top"><span class="voice-icon">🔊</span><span class="demo-tag">VOICE DEMO</span></div>
-        <span class="mini-label">SAMPLE NAVIGATION INSTRUCTION</span>
-        <h3 id="voiceSample">“Continue through the ground floor corridor towards the lift lobby.”</h3>
-        <div class="voice-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
-        <div class="voice-actions">
-          <button class="button button-primary" id="playVoiceButton" type="button">▶ Play sample</button>
-          <button class="button button-light" id="stopVoiceButton" type="button">Stop</button>
-        </div>
-        <p class="small-note">Voice guidance uses your browser's speech feature. Audio availability depends on your device and browser.</p>
-      </div>
-    </section>
+    <a class="button button-dark" href="#navigator">Plan a route now →</a>
+    <div class="cta-decoration">P</div>
+  </section>
 
-    <section class="section facility-section" id="facility">
-      <div class="facility-heading">
-        <div class="section-heading">
-          <span class="eyebrow">FACILITY MONITORING</span>
-          <h2>Check before<br><span>you travel.</span></h2>
-          <p>A lift may become unavailable. PathAble demonstrates how the route can be recalculated using the updated facility status.</p>
-        </div>
-        <div class="facility-alert">
-          <span>ⓘ</span>
-          <p><strong>Demo status control</strong><br>Use the button below to simulate a lift breakdown and test the alternative route.</p>
-        </div>
-      </div>
+</main>
 
-      <div class="lift-card">
-        <div class="lift-symbol">🛗</div>
-        <div class="lift-info">
-          <span class="mini-label">MAIN BUILDING · LIFT 01</span>
-          <h3>Central Passenger Lift</h3>
-          <p id="liftDescription">The lift is currently marked as operational in this demonstration.</p>
-        </div>
-        <div class="lift-state">
-          <span class="status-pill status-working" id="liftStatus">● Working</span>
-          <button class="button button-light" id="toggleLiftButton" type="button">Simulate breakdown</button>
-        </div>
-      </div>
-      <p class="small-note facility-note">This button changes the local demo status only. It does not connect to a real lift or notify campus staff.</p>
-    </section>
+<footer class="footer">
+  <a class="brand footer-brand" href="#home">
+    <span class="brand-icon">↗</span>
+    <span>Path<span class="brand-highlight">Able</span>
+      <small>ACCESS FOR EVERYONE</small>
+    </span>
+  </a>
 
-    <section class="cta-section">
-      <div>
-        <span class="eyebrow">A MORE INCLUSIVE TOMORROW</span>
-        <h2>Accessibility is not<br>an extra. It is essential.</h2>
-        <p>PathAble helps make campus navigation more thoughtful, clear and inclusive.</p>
-      </div>
-      <a class="button button-dark" href="#navigator">Plan a route now <span>→</span></a>
-      <div class="cta-decoration">P</div>
-    </section>
-  </main>
+  <p>Making campus journeys more accessible for everyone.</p>
+  <span class="footer-copy">© 2026 PathAble · Student project demonstration</span>
+</footer>
 
-  <footer class="footer">
-    <a class="brand footer-brand" href="#home">
-      <span class="brand-icon">↗</span>
-      <span>Path<span class="brand-highlight">Able</span><small>ACCESS FOR EVERYONE</small></span>
-    </a>
-    <p>Making campus journeys more accessible for everyone.</p>
-    <span class="footer-copy">© 2026 PathAble · Student project demonstration</span>
-  </footer>
+<!-- ACCESSIBILITY CONTROLS -->
+<div class="access-toolbar" aria-label="Accessibility display controls">
+  <button id="contrastButton" type="button" title="Toggle high contrast">
+    ◐ <span>Contrast</span>
+  </button>
+  <button id="textSizeButton" type="button" title="Toggle larger text">
+    A+ <span>Text size</span>
+  </button>
+</div>
 
-  <div class="access-toolbar" aria-label="Accessibility display controls">
-    <button id="contrastButton" type="button" title="Toggle high contrast">◐ <span>Contrast</span></button>
-    <button id="textSizeButton" type="button" title="Toggle larger text">A+ <span>Text size</span></button>
-  </div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-  <div class="toast" id="toast" role="status" aria-live="polite"></div>
-
-  <script src="script.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
