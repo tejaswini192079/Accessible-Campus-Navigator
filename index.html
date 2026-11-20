@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#102b25">
-  <title>PathAble | Accessible Campus Navigator</title>
+  <meta name="description" content="PathAble - Accessible Campus Navigator. Find safer, step-free campus routes.">
+  <title>PathAble | Every Path is Possible</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,375 +13,338 @@
 </head>
 <body>
 
-  <div class="top-strip">
-    <span>✦ ACCESSIBILITY FIRST</span>
-    <span>Campus navigation made easier for everyone</span>
+  <div class="announcement">
+    <span>✦</span> Accessibility is not a feature. It's a right.
+    <span class="announcement-tag">PATHABLE DEMO</span>
   </div>
 
   <header class="header">
-    <a class="brand" href="#home">
+    <a href="#home" class="brand">
       <span class="brand-icon">↗</span>
-      <span>Path<span>Able</span><small>ACCESSIBLE CAMPUS NAVIGATOR</small></span>
+      <span>path<span class="brand-highlight">able</span><small>ACCESSIBLE CAMPUS NAVIGATOR</small></span>
     </a>
 
-    <button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation" aria-expanded="false">☰</button>
+    <button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation">☰</button>
 
-    <nav class="nav-links" id="navLinks">
+    <nav class="nav" id="navLinks">
       <a href="#home">Home</a>
       <a href="#features">Features</a>
-      <a href="#navigator">Find a Route</a>
-      <a href="#map">Campus Map</a>
+      <a href="#navigator">Find a route</a>
       <a href="#accessibility">Accessibility</a>
+      <a href="#about">About</a>
     </nav>
 
-    <a class="header-btn" href="#navigator">Explore campus <span>↗</span></a>
+    <a class="nav-button" href="#navigator">Explore campus <span>↗</span></a>
   </header>
 
   <main>
+    <!-- HERO -->
     <section class="hero" id="home">
+      <div class="hero-image"></div>
       <div class="hero-overlay"></div>
+
       <div class="hero-content">
-        <div class="eyebrow"><span class="live-dot"></span> A CAMPUS WITHOUT BARRIERS</div>
-        <h1>Every path<br>should be <span>accessible.</span></h1>
-        <p>Find accessible routes, check campus facilities and move around with more confidence. Your campus journey starts here.</p>
+        <div class="eyebrow"><span class="live-dot"></span> SMART CAMPUS NAVIGATION</div>
+        <h1>Every path<br>should be <span>possible.</span></h1>
+        <p class="hero-description">
+          Explore your campus with confidence. Discover accessible routes,
+          locate ramps and lifts, and make every journey easier.
+        </p>
+
         <div class="hero-actions">
-          <a class="btn btn-primary" href="#navigator">Find my route <span>→</span></a>
-          <a class="btn btn-glass" href="#features">Discover features</a>
+          <a href="#navigator" class="btn btn-primary">Find my route <span>→</span></a>
+          <a href="#features" class="btn btn-glass">Discover PathAble</a>
         </div>
-        <div class="hero-note">
-          <span class="note-icon">✓</span>
-          Designed with wheelchair users and visually impaired students in mind.
+
+        <div class="hero-trust">
+          <div class="trust-icon">♿</div>
+          <div>
+            <strong>Designed for everyone</strong>
+            <small>Inclusive navigation for every student</small>
+          </div>
         </div>
       </div>
 
       <div class="hero-floating-card">
-        <div class="floating-icon">♿</div>
-        <div>
-          <strong>Accessibility matters</strong>
-          <small>Better routes. Better campus life.</small>
-        </div>
-        <span class="floating-check">✓</span>
+        <div class="floating-icon">✓</div>
+        <div><strong>Accessibility first</strong><small>Smarter campus journeys</small></div>
       </div>
 
-      <div class="hero-bottom">
-        <span>INCLUSIVE DESIGN</span>
-        <span>●</span>
-        <span>SMART ROUTES</span>
-        <span>●</span>
-        <span>VOICE SUPPORT</span>
-      </div>
+      <div class="hero-bottom-label">01 / ACCESSIBLE CAMPUS EXPERIENCE</div>
     </section>
 
-    <section class="stats-section">
-      <div class="stat-card">
-        <span class="stat-icon purple">⌖</span>
-        <div><strong>7</strong><small>Sample campus locations</small></div>
-      </div>
-      <div class="stat-card">
-        <span class="stat-icon green">♿</span>
-        <div><strong>4</strong><small>Step-free connections</small></div>
-      </div>
-      <div class="stat-card">
-        <span class="stat-icon orange">🔊</span>
-        <div><strong>1</strong><small>Voice guidance tool</small></div>
-      </div>
-      <div class="stat-card">
-        <span class="stat-icon blue">♡</span>
-        <div><strong>100%</strong><small>Inclusive design goal</small></div>
-      </div>
+    <!-- INTRO STRIP -->
+    <section class="intro-strip">
+      <div><span class="strip-symbol">✦</span> Find accessible paths</div>
+      <div><span class="strip-symbol">↗</span> Navigate with confidence</div>
+      <div><span class="strip-symbol">◎</span> Campus for everyone</div>
     </section>
 
+    <!-- FEATURES -->
     <section class="section features-section" id="features">
       <div class="section-heading">
         <div>
-          <span class="section-tag">WHAT PATHABLE OFFERS</span>
-          <h2>Campus access,<br><span>made simpler.</span></h2>
+          <div class="eyebrow dark-eyebrow">WHAT MAKES US DIFFERENT</div>
+          <h2>Navigation that<br><span>includes everyone.</span></h2>
         </div>
-        <p>Useful tools that help students understand their surroundings and choose a route that suits their needs.</p>
+        <p>PathAble helps students understand their surroundings and choose routes that better match their accessibility needs.</p>
       </div>
 
       <div class="feature-grid">
-        <article class="feature-card feature-photo">
-          <img src="https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&w=1000&q=85" alt="University campus building">
-          <div class="feature-photo-overlay"></div>
-          <div class="feature-photo-content">
-            <span class="feature-number">01 / NAVIGATION</span>
-            <h3>Find your way</h3>
-            <p>Explore sample routes between important campus locations.</p>
+        <article class="feature-card feature-large">
+          <img src="https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&w=1100&q=85" alt="Modern university campus">
+          <div class="feature-shade"></div>
+          <div class="feature-content">
+            <span class="feature-number">01</span>
+            <div class="feature-icon">♿</div>
+            <h3>Step-free routes</h3>
+            <p>Find sample routes designed to avoid stairs and prioritize accessible paths.</p>
             <a href="#navigator">Explore routes ↗</a>
           </div>
         </article>
 
-        <article class="feature-card">
-          <div class="feature-illustration lavender">♿</div>
-          <span class="feature-number">02 / ACCESSIBILITY</span>
-          <h3>Step-free routes</h3>
-          <p>Choose routes that avoid stairs and use accessible connections in our sample campus network.</p>
-          <a href="#navigator">Find accessible routes ↗</a>
-        </article>
-
-        <article class="feature-card">
-          <div class="feature-illustration peach">🔊</div>
-          <span class="feature-number">03 / VOICE SUPPORT</span>
-          <h3>Listen and navigate</h3>
-          <p>Listen to route instructions with built-in browser voice support.</p>
+        <article class="feature-card feature-green">
+          <div class="feature-decoration">◎</div>
+          <span class="feature-number">02</span>
+          <div class="feature-icon">🎙️</div>
+          <h3>Voice navigation</h3>
+          <p>Listen to route instructions with built-in voice guidance.</p>
           <a href="#navigator">Try voice guidance ↗</a>
         </article>
 
-        <article class="feature-card">
-          <div class="feature-illustration mint">🛗</div>
-          <span class="feature-number">04 / FACILITIES</span>
-          <h3>Know the facilities</h3>
-          <p>View the demonstration lift status and report a facility issue.</p>
-          <a href="#facilities">Check lift status ↗</a>
+        <article class="feature-card feature-purple">
+          <div class="feature-decoration">✳</div>
+          <span class="feature-number">03</span>
+          <div class="feature-icon">🔎</div>
+          <h3>Clear campus map</h3>
+          <p>Explore important campus locations through a simple visual map.</p>
+          <a href="#map-section">View campus map ↗</a>
+        </article>
+
+        <article class="feature-card feature-photo">
+          <img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=1100&q=85" alt="Students walking on a university campus">
+          <div class="photo-overlay"></div>
+          <div class="photo-content">
+            <span class="feature-number">04</span>
+            <div class="feature-icon">💚</div>
+            <h3>A campus for all</h3>
+            <p>Make campus exploration more inclusive and welcoming.</p>
+          </div>
         </article>
       </div>
     </section>
 
+    <!-- ROUTE FINDER -->
     <section class="navigator-section" id="navigator">
-      <div class="section-heading">
-        <div>
-          <span class="section-tag">YOUR JOURNEY STARTS HERE</span>
-          <h2>Where do you<br><span>want to go?</span></h2>
-        </div>
-        <p>Choose your starting point and destination. PathAble will find a route using the sample campus connections.</p>
-      </div>
-
-      <div class="navigator-layout">
-        <div class="route-panel">
-          <div class="panel-top">
-            <div>
-              <span class="panel-kicker">ROUTE PLANNER</span>
-              <h3>Plan your journey</h3>
-            </div>
-            <span class="route-symbol">⌖</span>
+      <div class="navigator-bg-shape"></div>
+      <div class="section">
+        <div class="section-heading navigator-heading">
+          <div>
+            <div class="eyebrow">YOUR JOURNEY STARTS HERE</div>
+            <h2>Where would you<br>like to <span>go today?</span></h2>
           </div>
-
-          <form id="routeForm">
-            <label for="from">STARTING POINT</label>
-            <div class="select-wrap">
-              <span>🟢</span>
-              <select id="from" required>
-                <option value="gate">Main Gate</option>
-                <option value="reception">Reception</option>
-                <option value="library">Library</option>
-                <option value="cafeteria">Cafeteria</option>
-                <option value="blockA">Block A</option>
-                <option value="blockB">Block B</option>
-                <option value="classroom">Classroom</option>
-              </select>
-            </div>
-
-            <button class="swap-btn" type="button" id="swapBtn" aria-label="Swap start and destination">⇅ Swap locations</button>
-
-            <label for="to">DESTINATION</label>
-            <div class="select-wrap">
-              <span>📍</span>
-              <select id="to" required>
-                <option value="library">Library</option>
-                <option value="gate">Main Gate</option>
-                <option value="reception">Reception</option>
-                <option value="cafeteria">Cafeteria</option>
-                <option value="blockA">Block A</option>
-                <option value="blockB">Block B</option>
-                <option value="classroom">Classroom</option>
-              </select>
-            </div>
-
-            <label class="choice-label">CHOOSE YOUR ROUTE</label>
-            <div class="route-choices">
-              <label class="choice-option">
-                <input type="radio" name="routeType" value="accessible" checked>
-                <span class="choice-content">
-                  <span class="choice-icon">♿</span>
-                  <span><strong>Step-free</strong><small>Avoid stairs</small></span>
-                </span>
-              </label>
-              <label class="choice-option">
-                <input type="radio" name="routeType" value="fastest">
-                <span class="choice-content">
-                  <span class="choice-icon">⚡</span>
-                  <span><strong>Fastest</strong><small>Shortest time</small></span>
-                </span>
-              </label>
-            </div>
-
-            <button class="btn btn-primary route-submit" type="submit">Find my route <span>→</span></button>
-          </form>
-
-          <p class="demo-note">ⓘ Demonstration routes only. Confirm actual campus accessibility before travelling.</p>
+          <p>Choose your starting point and destination. PathAble will show a sample route based on your selected preference.</p>
         </div>
 
-        <div class="route-result-panel">
-          <div class="result-header">
-            <div>
-              <span class="panel-kicker">YOUR ROUTE</span>
-              <h3>Journey overview</h3>
+        <div class="route-layout">
+          <div class="route-panel">
+            <div class="panel-top">
+              <div>
+                <span class="panel-kicker">CAMPUS ROUTE PLANNER</span>
+                <h3>Plan your journey</h3>
+              </div>
+              <span class="planner-icon">↗</span>
             </div>
-            <span class="result-status" id="routeStatus">READY</span>
+
+            <form id="routeForm">
+              <label for="from">STARTING POINT</label>
+              <div class="select-wrap">
+                <span>📍</span>
+                <select id="from" required>
+                  <option value="gate">Main Gate</option>
+                  <option value="reception">Reception</option>
+                  <option value="library">Library</option>
+                  <option value="cafeteria">Cafeteria</option>
+                  <option value="blockA">Block A</option>
+                  <option value="blockB">Block B</option>
+                  <option value="classroom">Classroom</option>
+                </select>
+              </div>
+
+              <button type="button" id="swapBtn" class="swap-button" aria-label="Swap locations">⇅</button>
+
+              <label for="to">DESTINATION</label>
+              <div class="select-wrap destination-wrap">
+                <span>🏁</span>
+                <select id="to" required>
+                  <option value="library">Library</option>
+                  <option value="gate">Main Gate</option>
+                  <option value="reception">Reception</option>
+                  <option value="cafeteria">Cafeteria</option>
+                  <option value="blockA">Block A</option>
+                  <option value="blockB">Block B</option>
+                  <option value="classroom">Classroom</option>
+                </select>
+              </div>
+
+              <div class="route-preference">
+                <span>ROUTE PREFERENCE</span>
+                <div class="preference-options">
+                  <label class="preference-option">
+                    <input type="radio" name="preference" value="accessible" checked>
+                    <span>♿ Step-free</span>
+                  </label>
+                  <label class="preference-option">
+                    <input type="radio" name="preference" value="fastest">
+                    <span>⚡ Fastest</span>
+                  </label>
+                </div>
+              </div>
+
+              <button type="submit" class="btn btn-primary find-button">Find accessible route <span>→</span></button>
+            </form>
+
+            <div class="route-result" id="routeResult" aria-live="polite">
+              <div class="result-heading">
+                <span class="result-check">✓</span>
+                <div><strong>Route ready!</strong><small id="routeKind">Step-free route</small></div>
+              </div>
+              <div class="result-stats">
+                <div><strong id="routeTime">--</strong><small>Estimated time</small></div>
+                <div><strong id="routeDistance">--</strong><small>Distance</small></div>
+              </div>
+              <div class="route-steps" id="routeSteps"></div>
+              <div class="result-actions">
+                <button type="button" id="speakBtn" class="btn btn-dark">🔊 Speak directions</button>
+                <button type="button" id="copyBtn" class="btn btn-outline">Copy route</button>
+              </div>
+              <button type="button" id="clearRouteBtn" class="clear-button">Clear route</button>
+            </div>
+
+            <p class="demo-note">ⓘ Demonstration data only. Times and routes are illustrative, not live campus directions.</p>
           </div>
 
-          <div class="result-empty" id="resultEmpty">
-            <div class="empty-art">🧭</div>
-            <h3>Your journey awaits!</h3>
-            <p>Select your starting point and destination, then tap “Find my route” to see the route details here.</p>
-          </div>
+          <div class="map-panel" id="map-section">
+            <div class="map-top">
+              <div><span class="panel-kicker">CAMPUS OVERVIEW</span><h3>Explore the map</h3></div>
+              <span class="map-live-label"><span></span> SAMPLE MAP</span>
+            </div>
 
-          <div class="result-content" id="resultContent" hidden>
-            <div class="route-summary">
-              <div><small>ESTIMATED TIME</small><strong id="routeTime">--</strong></div>
-              <div><small>DISTANCE</small><strong id="routeDistance">--</strong></div>
-              <div><small>ROUTE TYPE</small><strong id="routeKind">--</strong></div>
-            </div>
-            <div class="route-path">
-              <h4>Route instructions</h4>
-              <ol id="routeSteps"></ol>
-            </div>
-            <div class="result-actions">
-              <button class="btn btn-primary" type="button" id="speakBtn">🔊 Listen</button>
-              <button class="btn btn-light" type="button" id="copyBtn">▣ Copy directions</button>
-            </div>
-            <button class="text-button" type="button" id="clearRouteBtn">Clear route ×</button>
-          </div>
+            <div class="campus-map" id="campusMap">
+              <div class="map-grid"></div>
+              <div class="map-road road-one"></div>
+              <div class="map-road road-two"></div>
+              <div class="map-road road-three"></div>
+              <div class="map-green-area green-one"></div>
+              <div class="map-green-area green-two"></div>
+              <div class="map-building building-one"><span>LIBRARY</span></div>
+              <div class="map-building building-two"><span>BLOCK A</span></div>
+              <div class="map-building building-three"><span>BLOCK B</span></div>
+              <div class="map-building building-four"><span>CAFETERIA</span></div>
+              <div class="map-route-line" id="mapRouteLine"></div>
 
-          <div class="voice-message" id="voiceStatus" aria-live="polite">Voice guidance is ready when you find a route.</div>
+              <button class="map-pin pin-gate" data-location="gate" aria-label="Main Gate">🚪<small>Gate</small></button>
+              <button class="map-pin pin-reception" data-location="reception" aria-label="Reception">ℹ️<small>Reception</small></button>
+              <button class="map-pin pin-library" data-location="library" aria-label="Library">📚<small>Library</small></button>
+              <button class="map-pin pin-cafe" data-location="cafeteria" aria-label="Cafeteria">☕<small>Cafe</small></button>
+              <button class="map-pin pin-a" data-location="blockA" aria-label="Block A">🏢<small>Block A</small></button>
+              <button class="map-pin pin-b" data-location="blockB" aria-label="Block B">🏫<small>Block B</small></button>
+              <button class="map-pin pin-class" data-location="classroom" aria-label="Classroom">🎓<small>Class</small></button>
+            </div>
+
+            <div class="map-legend">
+              <span><i class="legend-green"></i> Accessible path</span>
+              <span><i class="legend-purple"></i> Campus building</span>
+              <span><i class="legend-orange"></i> Selected place</span>
+            </div>
+            <div class="map-info" id="mapInfo">Select any map location to use it as your destination.</div>
+            <button type="button" class="map-reset" id="resetMapBtn">↺ Reset map</button>
+          </div>
         </div>
-      </div>
-    </section>
-
-    <section class="map-section" id="map">
-      <div class="section-heading">
-        <div>
-          <span class="section-tag">EXPLORE THE CAMPUS</span>
-          <h2>A clearer view<br><span>of your campus.</span></h2>
-        </div>
-        <p>This sample map shows campus locations and connections. Select a location marker to see its name.</p>
-      </div>
-
-      <div class="map-layout">
-        <div class="map-board">
-          <div class="map-top-label"><span class="live-dot"></span> SAMPLE CAMPUS MAP <span>NOT LIVE GPS</span></div>
-          <div class="map-canvas" id="campusMap">
-            <div class="map-road road-one"></div>
-            <div class="map-road road-two"></div>
-            <div class="map-green green-one"></div>
-            <div class="map-green green-two"></div>
-            <svg class="map-lines" viewBox="0 0 600 420" preserveAspectRatio="none" aria-hidden="true">
-              <path d="M70 340 L180 280 L270 210 L390 150 L520 70" class="map-line-accessible"/>
-              <path d="M70 340 L180 280 L270 210 L390 150 L520 70" class="map-line-highlight" id="routeLines"/>
-              <path d="M180 280 L210 110 L390 150" class="map-line-secondary"/>
-              <path d="M270 210 L300 350 L480 290" class="map-line-secondary"/>
-            </svg>
-
-            <button class="map-pin pin-gate" data-location="gate"><span>🚪</span><small>Main Gate</small></button>
-            <button class="map-pin pin-reception" data-location="reception"><span>ℹ️</span><small>Reception</small></button>
-            <button class="map-pin pin-library" data-location="library"><span>📚</span><small>Library</small></button>
-            <button class="map-pin pin-cafe" data-location="cafeteria"><span>☕</span><small>Cafeteria</small></button>
-            <button class="map-pin pin-a" data-location="blockA"><span>🏢</span><small>Block A</small></button>
-            <button class="map-pin pin-b" data-location="blockB"><span>🏫</span><small>Block B</small></button>
-            <button class="map-pin pin-class" data-location="classroom"><span>🎓</span><small>Classroom</small></button>
-          </div>
-          <div class="map-bottom">
-            <span><i class="legend-dot accessible-dot"></i> Step-free connection</span>
-            <span><i class="legend-dot other-dot"></i> Other connection</span>
-            <button id="resetMapBtn" type="button">Reset map ↺</button>
-          </div>
-        </div>
-
-        <aside class="map-info">
-          <span class="panel-kicker">LOCATION DETAILS</span>
-          <div class="map-info-icon" id="locationIcon">📍</div>
-          <h3 id="locationName">Choose a location</h3>
-          <p id="locationDescription">Select any marker on the map to view sample location information.</p>
-          <div class="map-info-tags" id="locationTags"><span>Interactive map</span></div>
-          <button class="btn btn-primary full-btn" id="useLocationBtn" type="button">Use as destination →</button>
-          <p class="small-muted">Map locations and accessibility details are illustrative.</p>
-        </aside>
       </div>
     </section>
 
-    <section class="access-section" id="accessibility">
-      <div class="access-copy">
-        <span class="section-tag">MADE FOR EVERYONE</span>
+    <!-- ACCESSIBILITY -->
+    <section class="section accessibility-section" id="accessibility">
+      <div class="accessibility-visual">
+        <img src="https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?auto=format&fit=crop&w=1100&q=85" alt="University students collaborating together">
+        <div class="visual-caption">
+          <span>INCLUSION MATTERS</span>
+          <strong>Different abilities.<br>Equal opportunities.</strong>
+        </div>
+      </div>
+
+      <div class="accessibility-content">
+        <div class="eyebrow dark-eyebrow">MADE TO BE ACCESSIBLE</div>
         <h2>Your experience.<br><span>Your settings.</span></h2>
-        <p>Make the website easier to use with simple display and reading controls.</p>
-        <div class="access-image">
-          <img src="https://images.unsplash.com/photo-1577083552431-6e5fd01aa342?auto=format&fit=crop&w=1100&q=85" alt="Bright accessible public space">
-        </div>
-      </div>
+        <p>Customize the website to make information easier to see and hear.</p>
 
-      <div class="access-controls">
-        <div class="access-control-card">
-          <div class="control-icon">◐</div>
-          <div class="control-text"><strong>High contrast</strong><small>Increase contrast for better visibility</small></div>
-          <button class="toggle-btn" id="contrastBtn" type="button" aria-pressed="false"><span></span></button>
+        <div class="access-control">
+          <div><span class="control-icon">◐</span><div><strong>High contrast</strong><small>Improve text visibility</small></div></div>
+          <button type="button" class="toggle-button" id="contrastBtn" aria-pressed="false">OFF</button>
         </div>
-        <div class="access-control-card">
-          <div class="control-icon">A+</div>
-          <div class="control-text"><strong>Larger text</strong><small>Make website text easier to read</small></div>
-          <button class="toggle-btn" id="fontBtn" type="button" aria-pressed="false"><span></span></button>
+        <div class="access-control">
+          <div><span class="control-icon">A+</span><div><strong>Larger text</strong><small>Increase reading size</small></div></div>
+          <button type="button" class="toggle-button" id="fontBtn" aria-pressed="false">OFF</button>
         </div>
-        <div class="access-control-card">
-          <div class="control-icon">🔊</div>
-          <div class="control-text"><strong>Voice guidance</strong><small>Read route instructions aloud</small></div>
-          <button class="small-control-btn" id="accessVoiceBtn" type="button">Try voice</button>
+        <div class="access-control">
+          <div><span class="control-icon">🔊</span><div><strong>Voice assistance</strong><small>Read a welcome message</small></div></div>
+          <button type="button" class="toggle-button" id="voiceBtn">PLAY</button>
         </div>
-        <button class="reset-access-btn" id="resetAccessBtn" type="button">↺ Reset accessibility settings</button>
-        <p class="access-feedback" id="accessFeedback" aria-live="polite">Your accessibility settings are ready.</p>
+
+        <button type="button" class="reset-access" id="resetAccessBtn">↺ Reset accessibility settings</button>
+        <p class="access-feedback" id="accessFeedback" aria-live="polite">Your accessibility controls are ready.</p>
       </div>
     </section>
 
-    <section class="facility-section" id="facilities">
-      <div class="section-heading">
-        <div>
-          <span class="section-tag">CAMPUS FACILITIES</span>
-          <h2>Accessibility<br><span>updates matter.</span></h2>
+    <!-- LIFT STATUS -->
+    <section class="lift-section" id="about">
+      <div class="section lift-inner">
+        <div class="lift-copy">
+          <div class="eyebrow">CAMPUS FACILITY UPDATES</div>
+          <h2>Small updates.<br><span>Better journeys.</span></h2>
+          <p>Check the sample lift status and submit an issue report if a facility needs attention.</p>
+          <div class="lift-status-card">
+            <div class="lift-icon">🛗</div>
+            <div><strong>Main Block Lift</strong><small id="liftStatus">Demo status: Working</small></div>
+            <span class="status-pill" id="statusIndicator">WORKING</span>
+          </div>
+          <div class="lift-actions">
+            <button type="button" id="reportBtn" class="btn btn-primary">Report an issue</button>
+            <button type="button" id="verifyBtn" class="btn btn-light">Needs checking</button>
+            <button type="button" id="fixBtn" class="btn btn-light">Mark working</button>
+          </div>
+          <p class="demo-note light-note">Demo only: these updates are saved in this browser and are not sent to campus staff.</p>
+          <p class="access-feedback" id="updateFeedback" aria-live="polite"></p>
         </div>
-        <p>Check the demonstration lift status and submit an issue report in this prototype.</p>
-      </div>
 
-      <div class="facility-card">
-        <div class="facility-visual">
-          <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1100&q=85" alt="Modern building interior">
-          <div class="facility-image-label">CAMPUS FACILITY</div>
-        </div>
-        <div class="facility-details">
-          <span class="panel-kicker">BLOCK A · LIFT 01</span>
-          <h3>Lift availability</h3>
-          <p>View the sample lift status. This is a demonstration control, not a verified live facility update.</p>
-          <div class="lift-status-row">
-            <span class="status-indicator" id="statusIndicator"></span>
-            <strong id="liftStatus">Working</strong>
-            <span class="demo-label">DEMO STATUS</span>
-          </div>
-          <div class="facility-actions">
-            <button class="btn btn-primary" id="reportBtn" type="button">Report an issue</button>
-            <button class="btn btn-light" id="verifyBtn" type="button">Mark needs checking</button>
-            <button class="btn btn-light" id="fixBtn" type="button">Mark working</button>
-          </div>
-          <p class="facility-feedback" id="updateFeedback" aria-live="polite">No new reports in this demonstration.</p>
+        <div class="lift-image">
+          <img src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1000&q=85" alt="Modern accessible building interior">
+          <div class="image-sticker"><span>✦</span> Designed around people</div>
         </div>
       </div>
     </section>
 
-    <section class="cta-section">
-      <div>
-        <span class="section-tag">A MORE INCLUSIVE CAMPUS</span>
-        <h2>Access is not a privilege.<br><span>It is for everyone.</span></h2>
-        <p>PathAble aims to make campus navigation easier, clearer and more inclusive.</p>
+    <!-- CTA -->
+    <section class="final-cta">
+      <div class="cta-pattern"></div>
+      <div class="cta-content">
+        <div class="eyebrow">THE FUTURE IS INCLUSIVE</div>
+        <h2>Let's make every<br>journey <span>count.</span></h2>
+        <p>A more accessible campus begins with a better path.</p>
+        <a href="#navigator" class="btn btn-white">Start exploring <span>→</span></a>
       </div>
-      <a href="#navigator" class="btn btn-dark">Plan a journey <span>→</span></a>
-      <div class="cta-decoration">↗</div>
+      <div class="cta-symbol">↗</div>
     </section>
   </main>
 
   <footer class="footer">
-    <a class="brand footer-brand" href="#home">
+    <a href="#home" class="brand footer-brand">
       <span class="brand-icon">↗</span>
-      <span>Path<span>Able</span><small>ACCESSIBLE CAMPUS NAVIGATOR</small></span>
+      <span>path<span class="brand-highlight">able</span><small>ACCESSIBLE CAMPUS NAVIGATOR</small></span>
     </a>
-    <p>Every path should be accessible.</p>
-    <span>© 2026 PathAble · Student prototype</span>
+    <p>Every path should be accessible. 💚</p>
+    <span class="footer-copy">© 2026 PathAble · Student Project Prototype</span>
   </footer>
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
