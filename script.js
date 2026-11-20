@@ -1,316 +1,536 @@
-// PATHABLE - ACCESSIBLE CAMPUS NAVIGATOR
+"use strict";
 
-// 1. CAMPUS LOCATIONS
+/* PATHABLE - Accessible Campus Navigator
+   Demonstration prototype using sample campus data.
+*/
 
-const places = {
-  gate: "Main Gate",
-  reception: "Reception",
-  library: "Library",
-  cafeteria: "Cafeteria",
-  blockA: "Block A",
-  blockB: "Block B",
-  classroom: "Classroom 204"
+const $ = (id) => document.getElementById(id);
+
+const locations = {
+  gate: { name: "Main Gate", x: 70, y: 365 },
+  reception: { name: "Reception", x: 300, y: 380 },
+  library: { name: "Library", x: 525, y: 350 },
+  cafeteria: { name: "Cafeteria", x: 90, y: 90 },
+  blockA: { name: "Academic Block A", x: 300, y: 90 },
+  blockB: { name: "Academic Block B", x: 525, y: 90 },
+  classroom: { name: "Classroom 204", x: 390, y: 210 }
 };
 
-// 2. SAMPLE CAMPUS PATHS
-
-const edges = [
-  { from: "gate", to: "reception", time: 3, accessible: true, text: "Walk towards the reception." },
-  { from: "reception", to: "library", time: 4, accessible: true, text: "Continue along the accessible pathway to the library." },
-  { from: "reception", to: "cafeteria", time: 3, accessible: true, text: "Follow the pathway towards the cafeteria." },
-  { from: "reception", to: "blockA", time: 5, accessible: true, text: "Move towards Block A using the accessible path." },
-  { from: "gate", to: "cafeteria", time: 5, accessible: false, text: "Take the shorter general pathway." },
-  { from: "cafeteria", to: "blockB", time: 4, accessible: true, text: "Continue towards Block B." },
-  { from: "blockA", to: "blockB", time: 3, accessible: true, text: "Use the connecting accessible pathway." },
-  { from: "blockA", to: "classroom", time: 2, accessible: true, liftId: "blockA", text: "Use the Block A lift to reach Classroom 204." },
-  { from: "blockB", to: "classroom", time: 6, accessible: false, text: "Use the stairs towards Classroom 204." },
-  { from: "library", to: "blockA", time: 5, accessible: true, text: "Follow the path from the library to Block A." }
+// Each connection has a distance in estimated prototype minutes.
+// accessible:false means the connection is not available in step-free mode.
+const connections = [
+  { from: "gate", to: "reception", minutes: 3, accessible: true },
+  { from: "reception", to: "library", minutes: 4, accessible: true },
+  { from: "gate", to: "cafeteria", minutes: 5, accessible: true },
+  { from: "cafeteria", to: "blockA", minutes: 4, accessible: true },
+  { from: "blockA", to: "blockB", minutes: 3, accessible: true },
+  { from: "blockB", to: "library", minutes: 4, accessible: true },
+  { from: "reception", to: "blockA", minutes: 3, accessible: true },
+  { from: "blockA", to: "classroom", minutes: 2, accessible: false, lift: true },
+  { from: "blockB", to: "classroom", minutes: 4, accessible: true },
+  { from: "cafeteria", to: "reception", minutes: 5, accessible: true },
+  { from: "reception", to: "classroom", minutes: 6, accessible: true }
 ];
 
-// 3. LIFT STATUS
+let currentRoute = null;
+let currentDirections = [];
+let toastTimer = null;
 
-const STORAGE_KEY = "pathable-lift";
-let liftStatus = localStorage.getItem(STORAGE_KEY) || "working";
+// ---------- General helpers ----------
 
-const liftStatusElement = document.getElementById("liftStatus");
-const liftMessage = document.getElementById("liftMessage");
+function showToast(message) {
+  const toast = $("toast");
+  toast.textContent = message;
+  toast.classList.add("show");
 
-function saveLiftStatus() {
-  localStorage.setItem(STORAGE_KEY, liftStatus);
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => {
+    toast.classList.remove("show");
+  }, 2800);
 }
 
-function renderLiftStatus() {
-  liftStatusElement.className = "";
-
-  if (liftStatus === "working") {
-    liftStatusElement.textContent = "● Working";
-    liftStatusElement.classList.add("status-working");
-    liftMessage.textContent = "The lift is currently marked as working in this demo.";
-  } else if (liftStatus === "pending") {
-    liftStatusElement.textContent = "● Report Pending";
-    liftStatusElement.classList.add("status-pending");
-    liftMessage.textContent = "A lift issue has been reported. It is waiting for demo verification.";
-  } else {
-    liftStatusElement.textContent = "● Not Working";
-    liftStatusElement.classList.add("status-broken");
-    liftMessage.textContent = "The lift is marked as unavailable. The route finder will avoid it.";
-  }
+function setFeedback(id, message) {
+  const element = $(id);
+  if (element) element.textContent = message;
 }
 
-document.getElementById("reportBtn").addEventListener("click", () => {
-  liftStatus = "pending";
-  saveLiftStatus();
-  renderLiftStatus();
+function getSelectedMode() {
+  return document.querySelector('input[name="routeMode"]:checked')?.value || "fastest";
+}
+
+// ---------- Mobile navigation ----------
+
+$("menuToggle").addEventListener("click", () => {
+  const nav = $("navLinks");
+  const isOpen = nav.classList.toggle("open");
+
+  $("menuToggle").setAttribute("aria-expanded", String(isOpen));
+  $("menuToggle").textContent = isOpen ? "✕" : "☰";
+  $("menuToggle").setAttribute(
+    "aria-label",
+    isOpen ? "Close navigation menu" : "Open navigation menu"
+  );
 });
 
-document.getElementById("verifyBtn").addEventListener("click", () => {
-  if (liftStatus === "pending") {
-    liftStatus = "broken";
-    saveLiftStatus();
-    renderLiftStatus();
-  } else {
-    liftMessage.textContent = "There is no pending report to verify.";
-  }
+document.querySelectorAll("#navLinks a").forEach((link) => {
+  link.addEventListener("click", () => {
+    $("navLinks").classList.remove("open");
+    $("menuToggle").setAttribute("aria-expanded", "false");
+    $("menuToggle").textContent = "☰";
+    $("menuToggle").setAttribute("aria-label", "Open navigation menu");
+  });
 });
 
-document.getElementById("fixBtn").addEventListener("click", () => {
-  liftStatus = "working";
-  saveLiftStatus();
-  renderLiftStatus();
-});
+// ---------- Route calculation: Dijkstra's algorithm ----------
 
-renderLiftStatus();
-
-// 4. ROUTE FINDING USING DIJKSTRA'S ALGORITHM
-
-function getNeighbours(current, mode) {
-  return edges.filter(edge => {
-    const connected = edge.from === current || edge.to === current;
+function getNeighbours(locationId, stepFreeOnly) {
+  return connections.filter((edge) => {
+    const connected =
+      edge.from === locationId || edge.to === locationId;
 
     if (!connected) return false;
 
-    if (mode === "stepfree" && !edge.accessible) return false;
+    if (stepFreeOnly && !edge.accessible) return false;
 
-    if (edge.liftId && liftStatus === "broken") return false;
+    // A reported broken lift blocks the sample lift connection.
+    if (edge.lift && getLiftStatus() !== "working") return false;
 
     return true;
   });
 }
 
-function findRoute(start, destination, mode) {
+function calculateRoute(start, destination, stepFreeOnly) {
   const distances = {};
   const previous = {};
-  const visited = new Set();
+  const unvisited = new Set(Object.keys(locations));
 
-  Object.keys(places).forEach(place => {
-    distances[place] = Infinity;
+  Object.keys(locations).forEach((id) => {
+    distances[id] = Infinity;
+    previous[id] = null;
   });
 
   distances[start] = 0;
 
-  while (true) {
+  while (unvisited.size > 0) {
     let current = null;
-    let shortest = Infinity;
+    let smallestDistance = Infinity;
 
-    for (const place of Object.keys(places)) {
-      if (!visited.has(place) && distances[place] < shortest) {
-        shortest = distances[place];
-        current = place;
+    for (const id of unvisited) {
+      if (distances[id] < smallestDistance) {
+        smallestDistance = distances[id];
+        current = id;
       }
     }
 
-    if (current === null) break;
+    if (current === null || smallestDistance === Infinity) break;
     if (current === destination) break;
 
-    visited.add(current);
+    unvisited.delete(current);
 
-    const neighbours = getNeighbours(current, mode);
+    const neighbours = getNeighbours(current, stepFreeOnly);
 
-    for (const edge of neighbours) {
+    neighbours.forEach((edge) => {
       const next = edge.from === current ? edge.to : edge.from;
-      const newDistance = distances[current] + edge.time;
+
+      if (!unvisited.has(next)) return;
+
+      const newDistance = distances[current] + edge.minutes;
 
       if (newDistance < distances[next]) {
         distances[next] = newDistance;
-        previous[next] = {
-          place: current,
-          edge: edge
-        };
+        previous[next] = current;
       }
-    }
+    });
   }
 
-  if (distances[destination] === Infinity) {
-    return null;
-  }
+  if (distances[destination] === Infinity) return null;
 
   const path = [];
   let current = destination;
 
-  while (current !== start) {
-    const step = previous[current];
-
-    if (!step) return null;
-
-    path.unshift({
-      from: step.place,
-      to: current,
-      edge: step.edge
-    });
-
-    current = step.place;
+  while (current !== null) {
+    path.unshift(current);
+    current = previous[current];
   }
 
   return {
-    path: path,
-    totalTime: distances[destination]
+    path,
+    minutes: distances[destination],
+    stepFree: stepFreeOnly
   };
 }
 
-// 5. DISPLAY ROUTE
-
-let currentDirections = "";
-
-function renderRoute(route, start, destination, mode) {
-  const result = document.getElementById("result");
-
-  if (!route) {
-    result.innerHTML = `
-      <h4>⚠️ No route found</h4>
-      <p>There is no available route for these selected options.
-      Try another route or choose the fastest route.</p>
-    `;
-    currentDirections = "";
-    return;
-  }
-
-  const modeText = mode === "stepfree" ? "Step-free route" : "Fastest route";
-
-  let instructions = route.path.map((step, index) => {
-    let text = step.edge.text;
-
-    // Improve the direction for reverse travel.
-    if (step.edge.to !== step.to) {
-      text = `Continue from ${places[step.from]} towards ${places[step.to]}.`;
+function getRouteInstructions(path) {
+  return path.map((locationId, index) => {
+    if (index === 0) {
+      return `Start at ${locations[locationId].name}.`;
     }
 
-    return `<li>${text}</li>`;
-  }).join("");
+    if (index === path.length - 1) {
+      return `You have reached ${locations[locationId].name}.`;
+    }
 
-  result.innerHTML = `
-    <h4>✓ Route Found!</h4>
-    <p class="route-summary">
-      ${modeText} · Approximately ${route.totalTime} minutes
-    </p>
-    <p><strong>From:</strong> ${places[start]}</p>
-    <p><strong>To:</strong> ${places[destination]}</p>
-    <br>
-    <strong>Directions:</strong>
-    <ol>${instructions}</ol>
-  `;
-
-  currentDirections =
-    `Your ${modeText} from ${places[start]} to ${places[destination]} takes approximately ${route.totalTime} minutes. ` +
-    route.path.map(step => {
-      return step.edge.text;
-    }).join(" ");
+    return `Continue towards ${locations[locationId].name}.`;
+  });
 }
 
-// 6. ROUTE FORM
+// ---------- Display route ----------
 
-document.getElementById("routeForm").addEventListener("submit", function(event) {
+function renderRoute(route) {
+  const result = $("result");
+  const instructions = getRouteInstructions(route.path);
+
+  currentDirections = instructions;
+
+  const listItems = instructions
+    .map((instruction) => `<li>${instruction}</li>`)
+    .join("");
+
+  const modeText = route.stepFree
+    ? "♿ Step-free route"
+    : "⚡ Fastest available route";
+
+  result.innerHTML = `
+    <div class="route-summary">
+      <strong>✓ Route found successfully</strong>
+      <p>${modeText} · Estimated ${route.minutes} minutes</p>
+      <p>${locations[route.path[0]].name} → ${locations[route.path[route.path.length - 1]].name}</p>
+      <ol>${listItems}</ol>
+    </div>
+  `;
+
+  drawRoute(route.path);
+  updateMapSelection(route.path[0], route.path[route.path.length - 1]);
+
+  setFeedback("voiceStatus", "Your directions are ready. Press Read directions to hear them.");
+}
+
+function drawRoute(path) {
+  const svg = $("routeLines");
+  svg.innerHTML = "";
+
+  if (!path || path.length < 2) return;
+
+  const points = path
+    .map((id) => `${locations[id].x},${locations[id].y}`)
+    .join(" ");
+
+  const namespace = "http://www.w3.org/2000/svg";
+
+  const line = document.createElementNS(namespace, "polyline");
+  line.setAttribute("points", points);
+  svg.appendChild(line);
+
+  [path[0], path[path.length - 1]].forEach((id, index) => {
+    const circle = document.createElementNS(namespace, "circle");
+    circle.setAttribute("cx", locations[id].x);
+    circle.setAttribute("cy", locations[id].y);
+    circle.setAttribute("r", "9");
+    circle.setAttribute("fill", index === 0 ? "#f2a36f" : "#188567");
+    svg.appendChild(circle);
+  });
+}
+
+function updateMapSelection(start, destination) {
+  document.querySelectorAll(".map-building").forEach((building) => {
+    building.classList.remove("selected-start", "selected-end");
+  });
+
+  const mapClasses = {
+    gate: ".building-gate",
+    reception: ".building-reception",
+    library: ".building-library",
+    cafeteria: ".building-cafe",
+    blockA: ".building-a",
+    blockB: ".building-b",
+    classroom: ".building-class"
+  };
+
+  $( "campusMap" ).querySelector(mapClasses[start])?.classList.add("selected-start");
+  $("campusMap").querySelector(mapClasses[destination])?.classList.add("selected-end");
+}
+
+// ---------- Route form ----------
+
+$("routeForm").addEventListener("submit", (event) => {
   event.preventDefault();
 
-  const start = document.getElementById("from").value;
-  const destination = document.getElementById("to").value;
-  const mode = document.querySelector('input[name="routeMode"]:checked').value;
+  const start = $("from").value;
+  const destination = $("to").value;
+  const stepFree = getSelectedMode() === "stepfree";
 
   if (start === destination) {
-    document.getElementById("result").innerHTML =
-      "<h4>📍 You are already there!</h4><p>Please choose a different destination.</p>";
-    currentDirections = "";
+    $("result").innerHTML =
+      '<div class="route-error">Please select two different locations.</div>';
+    showToast("Choose a different destination.");
     return;
   }
 
-  const route = findRoute(start, destination, mode);
-  renderRoute(route, start, destination, mode);
+  const route = calculateRoute(start, destination, stepFree);
+
+  if (!route) {
+    currentRoute = null;
+    currentDirections = [];
+    $("result").innerHTML =
+      '<div class="route-error">No suitable route was found with these sample campus connections. Try another destination or check the lift status.</div>';
+    $("routeLines").innerHTML = "";
+    showToast("No route found. Try another destination.");
+    setFeedback("voiceStatus", "There are no directions available.");
+    return;
+  }
+
+  currentRoute = route;
+  renderRoute(route);
+  showToast("Your sample campus route is ready.");
 });
 
-// 7. VOICE NAVIGATION
+$("swapBtn").addEventListener("click", () => {
+  const from = $("from");
+  const to = $("to");
 
-document.getElementById("speakBtn").addEventListener("click", () => {
-  if (!currentDirections) {
-    alert("Please find a route first.");
+  const oldFrom = from.value;
+  from.value = to.value;
+  to.value = oldFrom;
+
+  showToast("Starting point and destination swapped.");
+});
+
+$("resetMapBtn").addEventListener("click", () => {
+  $("routeLines").innerHTML = "";
+  $("result").innerHTML = `
+    <div class="result-empty">
+      <span>🧭</span>
+      <div>
+        <strong>Your route will appear here</strong>
+        <small>Select two locations and press Find my route.</small>
+      </div>
+    </div>
+  `;
+
+  document.querySelectorAll(".map-building").forEach((building) => {
+    building.classList.remove("selected-start", "selected-end");
+  });
+
+  currentRoute = null;
+  currentDirections = [];
+  stopVoice();
+  setFeedback("voiceStatus", "Map reset. Select a new route.");
+  showToast("Map has been reset.");
+});
+
+// ---------- Voice guidance ----------
+
+function stopVoice() {
+  if ("speechSynthesis" in window) {
+    window.speechSynthesis.cancel();
+  }
+}
+
+$("speakBtn").addEventListener("click", () => {
+  if (!currentDirections.length) {
+    showToast("Find a route before starting voice guidance.");
+    setFeedback("voiceStatus", "No route selected yet.");
     return;
   }
 
   if (!("speechSynthesis" in window)) {
-    alert("Voice guidance is not supported by this browser.");
+    setFeedback("voiceStatus", "Your browser does not support voice guidance.");
+    showToast("Voice guidance is not supported in this browser.");
     return;
   }
 
-  window.speechSynthesis.cancel();
+  stopVoice();
 
-  const speech = new SpeechSynthesisUtterance(currentDirections);
+  const speech = new SpeechSynthesisUtterance(
+    "PathAble navigation. " + currentDirections.join(" ")
+  );
+
   speech.lang = "en-IN";
   speech.rate = 0.9;
+  speech.pitch = 1;
+
+  speech.onstart = () => {
+    setFeedback("voiceStatus", "Voice guidance is playing.");
+  };
+
+  speech.onend = () => {
+    setFeedback("voiceStatus", "Voice guidance completed.");
+  };
+
+  speech.onerror = () => {
+    setFeedback("voiceStatus", "Voice guidance could not be played.");
+  };
 
   window.speechSynthesis.speak(speech);
 });
 
-document.getElementById("stopBtn").addEventListener("click", () => {
-  if ("speechSynthesis" in window) {
-    window.speechSynthesis.cancel();
+$("stopBtn").addEventListener("click", () => {
+  stopVoice();
+  setFeedback("voiceStatus", "Voice guidance stopped.");
+  showToast("Voice guidance stopped.");
+});
+
+// ---------- Accessibility controls ----------
+
+$("contrastBtn").addEventListener("click", () => {
+  const enabled = document.body.classList.toggle("high-contrast");
+  $("contrastBtn").classList.toggle("active", enabled);
+
+  setFeedback(
+    "accessFeedback",
+    enabled ? "High contrast is enabled." : "High contrast is disabled."
+  );
+
+  showToast(enabled ? "High contrast enabled." : "High contrast disabled.");
+});
+
+$("fontBtn").addEventListener("click", () => {
+  const enabled = document.body.classList.toggle("large-text");
+  $("fontBtn").classList.toggle("active", enabled);
+
+  setFeedback(
+    "accessFeedback",
+    enabled ? "Larger text is enabled." : "Default text size restored."
+  );
+
+  showToast(enabled ? "Text size increased." : "Text size restored.");
+});
+
+$("resetAccessBtn").addEventListener("click", () => {
+  document.body.classList.remove("high-contrast", "large-text");
+  $("contrastBtn").classList.remove("active");
+  $("fontBtn").classList.remove("active");
+
+  setFeedback("accessFeedback", "All accessibility settings have been reset.");
+  showToast("Accessibility settings reset.");
+});
+
+// ---------- Lift status and issue reporting ----------
+
+const LIFT_STORAGE_KEY = "pathable-lift-status";
+
+function getLiftStatus() {
+  try {
+    return localStorage.getItem(LIFT_STORAGE_KEY) || "working";
+  } catch {
+    return "working";
+  }
+}
+
+function saveLiftStatus(status) {
+  try {
+    localStorage.setItem(LIFT_STORAGE_KEY, status);
+  } catch {
+    setFeedback("updateFeedback", "Browser storage is unavailable. This update may not remain after refreshing.");
+  }
+}
+
+function updateLiftDisplay() {
+  const status = getLiftStatus();
+  const pill = $("liftStatus");
+  const description = $("liftDescription");
+
+  pill.className = "status-pill";
+
+  if (status === "working") {
+    pill.textContent = "Working";
+    description.textContent = "The sample lift is marked as working.";
+  } else if (status === "pending") {
+    pill.textContent = "Pending";
+    pill.classList.add("pending");
+    description.textContent = "An issue has been reported and awaits verification.";
+  } else {
+    pill.textContent = "Needs attention";
+    pill.classList.add("broken");
+    description.textContent = "The sample lift is marked as unavailable.";
+  }
+}
+
+$("reportBtn").addEventListener("click", () => {
+  const confirmed = window.confirm(
+    "Report an issue with the Academic Block A lift in this demonstration?"
+  );
+
+  if (!confirmed) return;
+
+  saveLiftStatus("pending");
+  updateLiftDisplay();
+
+  setFeedback(
+    "updateFeedback",
+    "Issue report submitted. Use Verify report to demonstrate the next step."
+  );
+
+  showToast("Demo issue report submitted.");
+});
+
+$("verifyBtn").addEventListener("click", () => {
+  const status = getLiftStatus();
+
+  if (status !== "pending") {
+    setFeedback(
+      "updateFeedback",
+      "There is no pending issue report to verify. Submit a report first."
+    );
+    showToast("No pending report to verify.");
+    return;
+  }
+
+  const confirmed = window.confirm(
+    "Confirm that the reported lift issue has been checked in this demonstration?"
+  );
+
+  if (!confirmed) return;
+
+  saveLiftStatus("broken");
+  updateLiftDisplay();
+
+  setFeedback(
+    "updateFeedback",
+    "Demo report verified. The lift is now marked as needing attention."
+  );
+
+  showToast("Demo report verified.");
+});
+
+$("fixBtn").addEventListener("click", () => {
+  const confirmed = window.confirm(
+    "Mark the Academic Block A lift as working in this demonstration?"
+  );
+
+  if (!confirmed) return;
+
+  saveLiftStatus("working");
+  updateLiftDisplay();
+
+  setFeedback(
+    "updateFeedback",
+    "The sample lift has been marked as working."
+  );
+
+  showToast("Lift status updated to working.");
+
+  // If the current route depended on this lift, refresh the route.
+  if (currentRoute) {
+    const refreshedRoute = calculateRoute(
+      currentRoute.path[0],
+      currentRoute.path[currentRoute.path.length - 1],
+      currentRoute.stepFree
+    );
+
+    if (refreshedRoute) {
+      currentRoute = refreshedRoute;
+      renderRoute(refreshedRoute);
+    }
   }
 });
 
-// 8. HIGH CONTRAST MODE
+// ---------- Initial page setup ----------
 
-document.getElementById("contrastBtn").addEventListener("click", () => {
-  document.body.classList.toggle("high-contrast");
+updateLiftDisplay();
 
-  const active = document.body.classList.contains("high-contrast");
-
-  document.getElementById("contrastBtn").textContent =
-    active ? "◐ Normal Contrast" : "◐ High Contrast";
-});
-
-// 9. INCREASE TEXT SIZE
-
-let fontSizeLevel = 0;
-
-document.getElementById("fontBtn").addEventListener("click", () => {
-  fontSizeLevel++;
-
-  if (fontSizeLevel > 2) {
-    fontSizeLevel = 0;
-  }
-
-  const sizes = ["", "1.08", "1.16"];
-
-  document.documentElement.style.fontSize =
-    fontSizeLevel === 0 ? "16px" : `${16 * Number(sizes[fontSizeLevel])}px`;
-
-  document.getElementById("fontBtn").textContent =
-    fontSizeLevel === 0 ? "A+ Increase Text" :
-    fontSizeLevel === 1 ? "A++ Increase Text" : "A Reset Text";
-});
-
-// 10. MOBILE NAVIGATION
-
-const menuToggle = document.getElementById("menuToggle");
-const navLinks = document.getElementById("navLinks");
-
-menuToggle.addEventListener("click", () => {
-  navLinks.classList.toggle("open");
-});
-
-navLinks.querySelectorAll("a").forEach(link => {
-  link.addEventListener("click", () => {
-    navLinks.classList.remove("open");
-  });
-});
-
-// 11. INITIAL WELCOME MESSAGE
-
-console.log("PathAble Accessible Campus Navigator loaded successfully!");
+// Keep route controls ready and show a welcome message.
+setFeedback(
+  "voiceStatus",
+  "Choose your locations to create a sample route."
+);
