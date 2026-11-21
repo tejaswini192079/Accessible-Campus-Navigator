@@ -1,235 +1,68 @@
 
-// ==========================================
 // PATHABLE - ACCESSIBLE CAMPUS NAVIGATOR
-// Interactive route planner and demo features
-// ==========================================
 
-const startSelect = document.getElementById("startLocation");
-const endSelect = document.getElementById("endLocation");
-const wheelchairMode = document.getElementById("wheelchairMode");
-const voiceMode = document.getElementById("voiceMode");
-
-const findRouteButton = document.getElementById("findRouteButton");
-const swapButton = document.getElementById("swapButton");
-const resetButton = document.getElementById("resetButton");
-
-const routeResult = document.getElementById("routeResult");
-const activeRouteLine = document.getElementById("activeRouteLine");
-
-const liftStatus = document.getElementById("liftStatus");
-const liftDescription = document.getElementById("liftDescription");
-const toggleLiftButton = document.getElementById("toggleLiftButton");
-
-const toast = document.getElementById("toast");
-
-let liftWorking = true;
-let currentRoute = null;
-let lastToastTimer = null;
-
-// ------------------------------------------
-// CAMPUS LOCATIONS
-// ------------------------------------------
+const $ = (id) => document.getElementById(id);
 
 const locations = {
-  entrance: {
-    name: "Main Entrance",
-    x: 70,
-    y: 180,
-    description: "Main entrance of the college building."
-  },
-  rampJunction: {
-    name: "Ramp Junction",
-    x: 170,
-    y: 180,
-    description: "Accessible ramp connecting the entrance to the main corridor."
-  },
-  groundHall: {
-    name: "Ground Floor Corridor",
-    x: 270,
-    y: 180,
-    description: "Main ground floor corridor."
-  },
-  liftLobby: {
-    name: "Lift Lobby",
-    x: 270,
-    y: 90,
-    description: "Central lift lobby of the main building."
-  },
-  firstLanding: {
-    name: "First Floor Landing",
-    x: 390,
-    y: 180,
-    description: "Accessible landing on the first floor."
-  },
-  secondHall: {
-    name: "Second Floor Corridor",
-    x: 470,
-    y: 90,
-    description: "Corridor connecting classrooms on the second floor."
-  },
-  room204: {
-    name: "Room 204 – Second Floor",
-    x: 530,
-    y: 180,
-    description: "Classroom 204 on the second floor."
-  },
-  library: {
-    name: "Library – Ground Floor",
-    x: 530,
-    y: 285,
-    description: "College library on the ground floor."
-  },
-  office: {
-    name: "Student Office – First Floor",
-    x: 70,
-    y: 285,
-    description: "Student services office on the first floor."
-  }
+  gate: { name: "Main Gate", x: 9, y: 83 },
+  reception: { name: "Reception", x: 43, y: 58 },
+  library: { name: "Library", x: 51, y: 12 },
+  cafeteria: { name: "Cafeteria", x: 87, y: 34 },
+  blockA: { name: "Block A", x: 17, y: 40 },
+  blockB: { name: "Block B", x: 64, y: 77 },
+  classroom: { name: "Classroom", x: 86, y: 73 }
 };
 
-// ------------------------------------------
-// CAMPUS ROUTE NETWORK
-// ------------------------------------------
-// Each connection has a distance and a type.
-// wheelchair users cannot use stair connections.
-// A lift connection is available only when
-// the lift is marked as working.
-// The ramp route provides an alternative.
-
+// Sample campus connections.
+// "accessible: false" represents a sample route containing stairs.
 const connections = [
-  {
-    from: "entrance",
-    to: "rampJunction",
-    distance: 3,
-    type: "ramp",
-    instruction: "Move forward from the main entrance towards the accessible ramp."
-  },
-  {
-    from: "rampJunction",
-    to: "groundHall",
-    distance: 2,
-    type: "corridor",
-    instruction: "Continue along the accessible path into the ground floor corridor."
-  },
-  {
-    from: "groundHall",
-    to: "liftLobby",
-    distance: 1,
-    type: "corridor",
-    instruction: "Follow the corridor towards the central lift lobby."
-  },
-  {
-    from: "liftLobby",
-    to: "firstLanding",
-    distance: 1,
-    type: "lift",
-    instruction: "Enter the working lift and travel to the first floor."
-  },
-  {
-    from: "firstLanding",
-    to: "secondHall",
-    distance: 1,
-    type: "lift",
-    instruction: "Use the lift to reach the second floor."
-  },
-  {
-    from: "secondHall",
-    to: "room204",
-    distance: 1,
-    type: "corridor",
-    instruction: "Exit into the second floor corridor and continue to Room 204."
-  },
-
-  // Alternative step-free ramp connection.
-  {
-    from: "rampJunction",
-    to: "firstLanding",
-    distance: 6,
-    type: "ramp",
-    instruction: "Follow the accessible ramp route to the first floor landing."
-  },
-  {
-    from: "firstLanding",
-    to: "secondHall",
-    distance: 6,
-    type: "ramp",
-    instruction: "Continue along the accessible ramp to the second floor corridor."
-  },
-
-  // Stairs are included to demonstrate why
-  // the shortest route may not be accessible.
-  {
-    from: "groundHall",
-    to: "firstLanding",
-    distance: 1,
-    type: "stairs",
-    instruction: "Use the stairs to reach the first floor."
-  },
-  {
-    from: "firstLanding",
-    to: "secondHall",
-    distance: 1,
-    type: "stairs",
-    instruction: "Use the stairs to reach the second floor."
-  },
-
-  // Other destinations.
-  {
-    from: "groundHall",
-    to: "library",
-    distance: 2,
-    type: "corridor",
-    instruction: "Continue along the ground floor corridor towards the library."
-  },
-  {
-    from: "firstLanding",
-    to: "office",
-    distance: 3,
-    type: "corridor",
-    instruction: "Follow the first floor corridor towards the student office."
-  }
+  { from: "gate", to: "reception", distance: 120, accessible: true },
+  { from: "gate", to: "blockA", distance: 180, accessible: true },
+  { from: "reception", to: "library", distance: 160, accessible: true },
+  { from: "reception", to: "blockA", distance: 100, accessible: true },
+  { from: "reception", to: "cafeteria", distance: 190, accessible: true },
+  { from: "blockA", to: "blockB", distance: 210, accessible: false },
+  { from: "blockA", to: "classroom", distance: 270, accessible: true },
+  { from: "library", to: "cafeteria", distance: 170, accessible: true },
+  { from: "library", to: "blockB", distance: 200, accessible: true },
+  { from: "cafeteria", to: "classroom", distance: 140, accessible: true },
+  { from: "blockB", to: "classroom", distance: 110, accessible: true },
+  { from: "reception", to: "blockB", distance: 230, accessible: true }
 ];
 
-// ------------------------------------------
-// CREATE THE ROUTE GRAPH
-// ------------------------------------------
+let currentRoute = [];
+let currentRouteText = "";
+let toastTimer;
+let speech = null;
 
-function getAvailableConnections(wheelchairRequired) {
-  return connections.filter(connection => {
-    if (connection.type === "lift" && !liftWorking) {
-      return false;
-    }
-
-    if (wheelchairRequired && connection.type === "stairs") {
-      return false;
-    }
-
-    return true;
-  });
+function showToast(message) {
+  const toast = $("toast");
+  toast.textContent = message;
+  toast.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.remove("show"), 2600);
 }
 
-// ------------------------------------------
-// DIJKSTRA SHORTEST PATH ALGORITHM
-// ------------------------------------------
+// MOBILE MENU
 
-function calculateRoute(start, destination, wheelchairRequired) {
-  if (!locations[start] || !locations[destination]) {
-    return null;
-  }
+$("menuToggle").addEventListener("click", () => {
+  const nav = $("navLinks");
+  nav.classList.toggle("open");
+  $("menuToggle").textContent = nav.classList.contains("open") ? "✕" : "☰";
+});
 
-  if (start === destination) {
-    return {
-      path: [start],
-      steps: [],
-      distance: 0
-    };
-  }
+document.querySelectorAll(".nav a").forEach(link => {
+  link.addEventListener("click", () => {
+    $("navLinks").classList.remove("open");
+    $("menuToggle").textContent = "☰";
+  });
+});
 
-  const availableConnections = getAvailableConnections(wheelchairRequired);
+// ROUTE CALCULATION - DIJKSTRA'S ALGORITHM
 
+function calculateRoute(start, end, accessibleOnly) {
   const distances = {};
   const previous = {};
-  const previousConnection = {};
   const unvisited = new Set(Object.keys(locations));
 
   Object.keys(locations).forEach(location => {
@@ -241,635 +74,359 @@ function calculateRoute(start, destination, wheelchairRequired) {
 
   while (unvisited.size > 0) {
     let current = null;
-    let smallestDistance = Infinity;
 
-    for (const location of unvisited) {
-      if (distances[location] < smallestDistance) {
-        smallestDistance = distances[location];
-        current = location;
+    for (const node of unvisited) {
+      if (current === null || distances[node] < distances[current]) {
+        current = node;
       }
     }
 
-    if (current === null || smallestDistance === Infinity) {
-      break;
-    }
-
-    if (current === destination) {
-      break;
-    }
+    if (current === null || distances[current] === Infinity) break;
+    if (current === end) break;
 
     unvisited.delete(current);
 
-    availableConnections.forEach(connection => {
-      let neighbour = null;
+    connections.forEach(edge => {
+      if (accessibleOnly && !edge.accessible) return;
 
-      if (connection.from === current) {
-        neighbour = connection.to;
-      } else if (connection.to === current) {
-        neighbour = connection.from;
-      }
+      let neighbor = null;
 
-      if (!neighbour || !unvisited.has(neighbour)) {
-        return;
-      }
+      if (edge.from === current) neighbor = edge.to;
+      if (edge.to === current) neighbor = edge.from;
 
-      const newDistance = distances[current] + connection.distance;
+      if (!neighbor || !unvisited.has(neighbor)) return;
 
-      if (newDistance < distances[neighbour]) {
-        distances[neighbour] = newDistance;
-        previous[neighbour] = current;
-        previousConnection[neighbour] = connection;
+      const newDistance = distances[current] + edge.distance;
+
+      if (newDistance < distances[neighbor]) {
+        distances[neighbor] = newDistance;
+        previous[neighbor] = current;
       }
     });
   }
 
-  if (distances[destination] === Infinity) {
-    return null;
-  }
+  if (distances[end] === Infinity) return null;
 
   const path = [];
-  const steps = [];
-
-  let current = destination;
+  let current = end;
 
   while (current !== null) {
     path.unshift(current);
-
-    if (previousConnection[current]) {
-      steps.unshift(previousConnection[current]);
-    }
-
     current = previous[current];
-  }
-
-  if (path[0] !== start) {
-    return null;
   }
 
   return {
     path,
-    steps,
-    distance: distances[destination]
+    distance: distances[end]
   };
 }
 
-// ------------------------------------------
-// ROUTE DESCRIPTION
-// ------------------------------------------
+// ROUTE FORM
 
-function getRouteType(route) {
-  if (!route || route.steps.length === 0) {
-    return "No travel needed";
+$("routeForm").addEventListener("submit", (event) => {
+  event.preventDefault();
+
+  const start = $("from").value;
+  const end = $("to").value;
+  const preference = document.querySelector('input[name="preference"]:checked').value;
+
+  if (start === end) {
+    showToast("Please select two different locations.");
+    return;
   }
 
-  const types = route.steps.map(step => step.type);
+  const accessibleOnly = preference === "accessible";
+  const result = calculateRoute(start, end, accessibleOnly);
 
-  if (types.includes("ramp")) {
-    return "Ramp-accessible route";
+  if (!result) {
+    showToast("No route found for this selection. Try the fastest option.");
+    return;
   }
 
-  if (types.includes("lift")) {
-    return "Lift-accessible route";
-  }
+  currentRoute = result.path;
 
-  if (types.includes("stairs")) {
-    return "Route with stairs";
-  }
+  const minutes = Math.max(1, Math.ceil(result.distance / 75));
+  const distance = result.distance;
 
-  return "Corridor route";
-}
+  $("routeTime").textContent = minutes + " min";
+  $("routeDistance").textContent = distance + " m";
+  $("routeKind").textContent = accessibleOnly ? "Step-free route" : "Fastest available route";
 
-function getStepInstruction(step, index, route) {
-  const instruction = step.instruction;
-
-  if (step.type === "lift" && !liftWorking) {
-    return "The lift is unavailable. This connection cannot be used.";
-  }
-
-  return instruction;
-}
-
-function getRouteWarnings(route, wheelchairRequired) {
-  const warnings = [];
-
-  if (!liftWorking) {
-    warnings.push(
-      "The central lift is marked out of service in this demo. PathAble has checked for another available route."
-    );
-  }
-
-  if (!wheelchairRequired && route.steps.some(step => step.type === "stairs")) {
-    warnings.push(
-      "This route includes stairs. It is not suitable for a step-free journey."
-    );
-  }
-
-  if (route.steps.some(step => step.type === "ramp")) {
-    warnings.push(
-      "This route uses the accessible ramp network instead of the unavailable lift."
-    );
-  }
-
-  return warnings;
-}
-
-// ------------------------------------------
-// DISPLAY ROUTE RESULTS
-// ------------------------------------------
-
-function displayRoute(route, start, destination, wheelchairRequired) {
-  currentRoute = {
-    route,
-    start,
-    destination,
-    wheelchairRequired
-  };
-
-  const routeType = getRouteType(route);
-  const warnings = getRouteWarnings(route, wheelchairRequired);
-
-  const stepsHTML = route.steps.map((step, index) => {
-    const fromName = locations[route.path[index]].name;
-    const toName = locations[route.path[index + 1]].name;
-
-    return `
-      <li>
-        <span class="step-number">${index + 1}</span>
-        <div>
-          <strong>${escapeHTML(fromName)} → ${escapeHTML(toName)}</strong>
-          <p>${escapeHTML(getStepInstruction(step, index, route))}</p>
-        </div>
-      </li>
-    `;
+  $("routeSteps").innerHTML = result.path.map((id, index) => {
+    const arrow = index < result.path.length - 1 ? " → " : "";
+    return `<span>${escapeHTML(locations[id].name)}${arrow}</span>`;
   }).join("");
 
-  const warningHTML = warnings.map(warning => `
-    <div class="route-warning">ⓘ ${escapeHTML(warning)}</div>
-  `).join("");
+  currentRouteText = "PathAble sample route: " +
+    result.path.map(id => locations[id].name).join(" to ") +
+    ". Estimated distance " + distance + " metres. Estimated walking time " +
+    minutes + " minutes. " +
+    (accessibleOnly ? "Step-free route preference selected." : "Fastest route preference selected.");
 
-  const distanceText = route.distance === 0
-    ? "Already here"
-    : `${route.distance} demo units`;
+  $("routeResult").classList.add("show");
+  $("mapRouteLine").classList.add("visible");
 
-  routeResult.innerHTML = `
-    <div class="result-top">
-      <div>
-        <span class="mini-label">YOUR ROUTE IS READY</span>
-        <h3>${escapeHTML(locations[start].name)} → ${escapeHTML(locations[destination].name)}</h3>
-      </div>
-      <div class="result-metrics">
-        <span class="metric">↗ ${distanceText}</span>
-        <span class="metric">♿ ${escapeHTML(routeType)}</span>
-      </div>
-    </div>
+  document.querySelectorAll(".map-pin").forEach(pin => {
+    pin.classList.toggle("selected", result.path.includes(pin.dataset.location));
+  });
 
-    ${warningHTML}
+  $("mapInfo").textContent = "Selected route: " +
+    locations[start].name + " to " + locations[end].name +
+    ". " + distance + " metres (illustrative).";
 
-    <ol class="route-steps">
-      ${
-        route.steps.length
-          ? stepsHTML
-          : "<li>You are already at your selected destination.</li>"
-      }
-    </ol>
-
-    <div class="result-actions">
-      <button class="button button-primary button-small" id="speakRouteButton" type="button">🔊 Read directions</button>
-      <button class="button button-light button-small" id="copyRouteButton" type="button">▣ Copy directions</button>
-      <button class="button button-light button-small" id="recalculateButton" type="button">↻ Recalculate</button>
-    </div>
-  `;
-
-  drawRoute(route.path);
-  updateMapMarkers(route.path, start, destination);
-
-  if (voiceMode.checked) {
-    speakRoute();
-  }
-
-  showToast("Accessible route calculated successfully.");
-}
-
-// ------------------------------------------
-// SAFE HTML TEXT DISPLAY
-// ------------------------------------------
+  $("routeResult").scrollIntoView({ behavior: "smooth", block: "nearest" });
+  showToast("Your sample route is ready!");
+});
 
 function escapeHTML(value) {
-  return String(value).replace(/[&<>"']/g, character => {
-    const replacements = {
-      "&": "&amp;",
-      "<": "&lt;",
-      ">": "&gt;",
-      '"': "&quot;",
-      "'": "&#039;"
-    };
-
-    return replacements[character];
-  });
+  return String(value).replace(/[&<>"']/g, char => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  })[char]);
 }
 
-// ------------------------------------------
-// DRAW THE SELECTED ROUTE ON THE MAP
-// ------------------------------------------
+// SWAP LOCATIONS
 
-function drawRoute(path) {
-  const coordinates = path.map(location => {
-    const point = locations[location];
-    return `${point.x} ${point.y}`;
-  });
-
-  activeRouteLine.setAttribute("d", `M ${coordinates.join(" L ")}`);
-}
-
-function clearRouteMap() {
-  activeRouteLine.setAttribute("d", "");
-
-  document.querySelectorAll(".map-point").forEach(marker => {
-    marker.classList.remove("selected", "route-active", "route-start", "route-end");
-  });
-}
-
-function updateMapMarkers(path, start, destination) {
-  clearRouteMap();
-
-  path.forEach(location => {
-    const marker = document.querySelector(
-      `.map-point[data-location="${location}"]`
-    );
-
-    if (marker) {
-      marker.classList.add("route-active");
-    }
-  });
-
-  const startMarker = document.querySelector(
-    `.map-point[data-location="${start}"]`
-  );
-
-  const endMarker = document.querySelector(
-    `.map-point[data-location="${destination}"]`
-  );
-
-  if (startMarker) startMarker.classList.add("route-start");
-  if (endMarker) endMarker.classList.add("route-end");
-}
-
-// ------------------------------------------
-// FIND ROUTE BUTTON
-// ------------------------------------------
-
-function findRoute() {
-  const start = startSelect.value;
-  const destination = endSelect.value;
-  const wheelchairRequired = wheelchairMode.checked;
-
-  if (!start || !destination) {
-    showToast("Please select both locations.");
-    return;
-  }
-
-  const route = calculateRoute(
-    start,
-    destination,
-    wheelchairRequired
-  );
-
-  if (!route) {
-    currentRoute = null;
-    clearRouteMap();
-
-    routeResult.innerHTML = `
-      <div class="no-route">
-        <strong>⚠ No accessible route found.</strong>
-        <p>There is no available route between these locations with the current accessibility settings. Please choose another destination or check the facility status.</p>
-      </div>
-    `;
-
-    showToast("No route is available with these settings.");
-    return;
-  }
-
-  displayRoute(route, start, destination, wheelchairRequired);
-}
-
-findRouteButton.addEventListener("click", findRoute);
-
-// ------------------------------------------
-// SWAP START AND DESTINATION
-// ------------------------------------------
-
-swapButton.addEventListener("click", () => {
-  const oldStart = startSelect.value;
-  startSelect.value = endSelect.value;
-  endSelect.value = oldStart;
-
+$("swapBtn").addEventListener("click", () => {
+  const from = $("from");
+  const to = $("to");
+  const previous = from.value;
+  from.value = to.value;
+  to.value = previous;
   showToast("Starting point and destination swapped.");
-  findRoute();
 });
 
-// ------------------------------------------
-// RESET PLANNER
-// ------------------------------------------
+// MAP MARKERS
 
-resetButton.addEventListener("click", () => {
-  startSelect.value = "entrance";
-  endSelect.value = "room204";
-  wheelchairMode.checked = true;
-  voiceMode.checked = false;
+document.querySelectorAll(".map-pin").forEach(pin => {
+  pin.addEventListener("click", () => {
+    const id = pin.dataset.location;
+    const location = locations[id];
 
-  currentRoute = null;
-
-  routeResult.innerHTML = `
-    <div class="result-placeholder">
-      <span class="placeholder-icon">🧭</span>
-      <div>
-        <strong>Your route will appear here</strong>
-        <p>Select your starting point and destination, then press Find My Route.</p>
-      </div>
-    </div>
-  `;
-
-  clearRouteMap();
-  stopVoice();
-
-  showToast("Route planner has been reset.");
-});
-
-// ------------------------------------------
-// MAP MARKER SELECTION
-// ------------------------------------------
-
-document.querySelectorAll(".map-point").forEach(marker => {
-  marker.addEventListener("click", () => {
-    const location = marker.dataset.location;
-
-    if (!locations[location]) {
-      return;
-    }
-
-    startSelect.value = location;
-
-    document.querySelectorAll(".map-point").forEach(point => {
-      point.classList.remove("selected");
+    document.querySelectorAll(".map-pin").forEach(item => {
+      item.classList.remove("selected");
     });
 
-    marker.classList.add("selected");
+    pin.classList.add("selected");
+    $("to").value = id;
+    $("mapInfo").textContent = location.name +
+      " selected as destination. Choose a starting point and find your route.";
 
-    showToast(`${locations[location].name} selected as your starting point.`);
+    showToast(location.name + " selected as destination.");
   });
 });
 
-// ------------------------------------------
-// ROUTE RESULT BUTTONS
-// ------------------------------------------
+// RESET MAP
 
-routeResult.addEventListener("click", event => {
-  const button = event.target.closest("button");
-
-  if (!button) return;
-
-  if (button.id === "speakRouteButton") {
-    speakRoute();
-  }
-
-  if (button.id === "copyRouteButton") {
-    copyRoute();
-  }
-
-  if (button.id === "recalculateButton") {
-    findRoute();
-  }
-});
-
-// ------------------------------------------
-// VOICE NAVIGATION
-// ------------------------------------------
-
-function getVoiceText() {
-  if (!currentRoute) {
-    return "Please find a route first to hear your directions.";
-  }
-
-  const route = currentRoute.route;
-
-  if (route.steps.length === 0) {
-    return "You are already at your selected destination.";
-  }
-
-  let text = `Your route starts at ${locations[currentRoute.start].name}. `;
-
-  route.steps.forEach((step, index) => {
-    const from = locations[route.path[index]].name;
-    const to = locations[route.path[index + 1]].name;
-
-    text += `Step ${index + 1}. From ${from} to ${to}. `;
-    text += step.instruction + " ";
+$("resetMapBtn").addEventListener("click", () => {
+  document.querySelectorAll(".map-pin").forEach(pin => {
+    pin.classList.remove("selected");
   });
 
-  text += `You have reached ${locations[currentRoute.destination].name}.`;
+  $("mapRouteLine").classList.remove("visible");
+  $("mapInfo").textContent = "Select any map location to use it as your destination.";
+  $("routeResult").classList.remove("show");
+  currentRoute = [];
+  currentRouteText = "";
+  showToast("Map has been reset.");
+});
 
-  return text;
-}
+// CLEAR ROUTE
 
-function speakText(text) {
-  if (!("speechSynthesis" in window)) {
-    showToast("Voice guidance is not supported by this browser.");
-    return;
-  }
+$("clearRouteBtn").addEventListener("click", () => {
+  $("routeResult").classList.remove("show");
+  $("mapRouteLine").classList.remove("visible");
+  $("mapInfo").textContent = "Route cleared. Choose new locations to plan another journey.";
+  document.querySelectorAll(".map-pin").forEach(pin => pin.classList.remove("selected"));
+  currentRoute = [];
+  currentRouteText = "";
+  stopSpeech();
+  showToast("Route cleared.");
+});
 
-  window.speechSynthesis.cancel();
+// VOICE GUIDANCE
 
-  const utterance = new SpeechSynthesisUtterance(text);
-  utterance.lang = "en-IN";
-  utterance.rate = 0.9;
-  utterance.pitch = 1;
-  utterance.volume = 1;
-
-  window.speechSynthesis.speak(utterance);
-}
-
-function speakRoute() {
-  speakText(getVoiceText());
-}
-
-function stopVoice() {
+function stopSpeech() {
   if ("speechSynthesis" in window) {
     window.speechSynthesis.cancel();
   }
 }
 
-document.getElementById("playVoiceButton").addEventListener("click", () => {
-  speakText(
-    "Continue through the ground floor corridor towards the lift lobby. " +
-    "Use the working lift to reach the first floor. " +
-    "Continue to the second floor corridor and follow the directions to your classroom."
-  );
+$("speakBtn").addEventListener("click", () => {
+  if (!currentRouteText) {
+    showToast("Find a route first.");
+    return;
+  }
+
+  if (!("speechSynthesis" in window)) {
+    showToast("Voice guidance is not supported in this browser.");
+    return;
+  }
+
+  stopSpeech();
+  speech = new SpeechSynthesisUtterance(currentRouteText);
+  speech.lang = "en-IN";
+  speech.rate = 0.9;
+  speech.pitch = 1;
+  window.speechSynthesis.speak(speech);
+  showToast("Voice directions started.");
 });
 
-document.getElementById("stopVoiceButton").addEventListener("click", () => {
-  stopVoice();
-  showToast("Voice guidance stopped.");
-});
+// COPY ROUTE
 
-// ------------------------------------------
-// COPY ROUTE DIRECTIONS
-// ------------------------------------------
-
-async function copyRoute() {
-  if (!currentRoute) return;
-
-  const text = getVoiceText();
+$("copyBtn").addEventListener("click", async () => {
+  if (!currentRouteText) {
+    showToast("Find a route first.");
+    return;
+  }
 
   try {
-    if (navigator.clipboard && window.isSecureContext) {
-      await navigator.clipboard.writeText(text);
-    } else {
-      const temporaryInput = document.createElement("textarea");
-      temporaryInput.value = text;
-      temporaryInput.style.position = "fixed";
-      temporaryInput.style.opacity = "0";
-      document.body.appendChild(temporaryInput);
-      temporaryInput.select();
+    await navigator.clipboard.writeText(currentRouteText);
+    showToast("Route copied to clipboard!");
+  } catch (error) {
+    const textArea = document.createElement("textarea");
+    textArea.value = currentRouteText;
+    document.body.appendChild(textArea);
+    textArea.select();
 
-      const copied = document.execCommand("copy");
-      temporaryInput.remove();
-
-      if (!copied) {
-        throw new Error("Copy was not successful");
-      }
+    try {
+      document.execCommand("copy");
+      showToast("Route copied!");
+    } catch {
+      showToast("Clipboard access is unavailable.");
     }
 
-    showToast("Route directions copied.");
-  } catch (error) {
-    showToast("Copy is unavailable in this browser. You can read the directions on screen.");
+    textArea.remove();
   }
+});
+
+// ACCESSIBILITY SETTINGS
+
+function setToggle(buttonId, enabled) {
+  const button = $(buttonId);
+  button.classList.toggle("active", enabled);
+  button.textContent = enabled ? "ON" : "OFF";
+  button.setAttribute("aria-pressed", String(enabled));
 }
 
-// ------------------------------------------
-// LIFT STATUS SIMULATION
-// ------------------------------------------
+$("contrastBtn").addEventListener("click", () => {
+  const enabled = !document.body.classList.contains("high-contrast");
+  document.body.classList.toggle("high-contrast", enabled);
+  setToggle("contrastBtn", enabled);
+  $("accessFeedback").textContent = enabled
+    ? "High contrast mode is enabled."
+    : "High contrast mode is disabled.";
+});
 
-function updateLiftDisplay() {
-  if (liftWorking) {
-    liftStatus.textContent = "● Working";
-    liftStatus.className = "status-pill status-working";
+$("fontBtn").addEventListener("click", () => {
+  const enabled = !document.body.classList.contains("large-text");
+  document.body.classList.toggle("large-text", enabled);
+  setToggle("fontBtn", enabled);
+  $("accessFeedback").textContent = enabled
+    ? "Larger text is enabled."
+    : "Normal text size is restored.";
+});
 
-    liftDescription.textContent =
-      "The lift is currently marked as operational in this demonstration.";
-
-    toggleLiftButton.textContent = "Simulate breakdown";
-  } else {
-    liftStatus.textContent = "● Out of service";
-    liftStatus.className = "status-pill status-broken";
-
-    liftDescription.textContent =
-      "The lift is marked unavailable. New route calculations will avoid this lift.";
-
-    toggleLiftButton.textContent = "Restore lift";
+$("voiceBtn").addEventListener("click", () => {
+  if (!("speechSynthesis" in window)) {
+    showToast("Voice assistance is not supported in this browser.");
+    return;
   }
+
+  stopSpeech();
+
+  const message = new SpeechSynthesisUtterance(
+    "Welcome to PathAble. Every path should be accessible. Use the route planner to explore your campus."
+  );
+
+  message.lang = "en-IN";
+  message.rate = 0.9;
+  window.speechSynthesis.speak(message);
+  showToast("Welcome message is playing.");
+});
+
+$("resetAccessBtn").addEventListener("click", () => {
+  document.body.classList.remove("high-contrast", "large-text");
+  setToggle("contrastBtn", false);
+  setToggle("fontBtn", false);
+  $("accessFeedback").textContent = "All accessibility settings have been reset.";
+  stopSpeech();
+  showToast("Accessibility settings reset.");
+});
+
+// LIFT STATUS DEMO
+
+const liftStorageKey = "pathable-lift-status";
+
+function updateLift(status, message) {
+  localStorage.setItem(liftStorageKey, status);
+
+  const label = $("liftStatus");
+  const pill = $("statusIndicator");
+
+  pill.className = "status-pill";
+
+  if (status === "working") {
+    label.textContent = "Demo status: Working";
+    pill.textContent = "WORKING";
+  } else if (status === "checking") {
+    label.textContent = "Demo status: Needs checking";
+    pill.textContent = "CHECKING";
+    pill.classList.add("checking");
+  } else {
+    label.textContent = "Demo status: Issue reported";
+    pill.textContent = "REPORTED";
+    pill.classList.add("issue");
+  }
+
+  $("updateFeedback").textContent = message;
+  showToast(message);
 }
 
-toggleLiftButton.addEventListener("click", () => {
-  liftWorking = !liftWorking;
+const savedLiftStatus = localStorage.getItem(liftStorageKey);
+if (["working", "checking", "issue"].includes(savedLiftStatus)) {
+  updateLift(savedLiftStatus, "Saved demo lift status loaded.");
+}
 
-  updateLiftDisplay();
+$("reportBtn").addEventListener("click", () => {
+  updateLift("issue", "Demo issue report recorded in this browser.");
+});
 
-  if (liftWorking) {
-    showToast("Demo lift restored. You can calculate routes using the lift again.");
-  } else {
-    showToast("Lift marked out of service. Recalculate your route.");
+$("verifyBtn").addEventListener("click", () => {
+  updateLift("checking", "Lift marked as needing a check in this demo.");
+});
+
+$("fixBtn").addEventListener("click", () => {
+  updateLift("working", "Lift marked as working in this demo.");
+});
+
+// CLOSE MOBILE MENU ON OUTSIDE CLICK
+
+document.addEventListener("click", (event) => {
+  const nav = $("navLinks");
+  const menu = $("menuToggle");
+
+  if (!nav.contains(event.target) && !menu.contains(event.target)) {
+    nav.classList.remove("open");
+    menu.textContent = "☰";
   }
-
-  // Automatically update the current journey if one exists.
-  if (currentRoute) {
-    findRoute();
-  }
 });
 
-// ------------------------------------------
-// ACCESSIBILITY: HIGH CONTRAST
-// ------------------------------------------
+// KEYBOARD SUPPORT FOR MAP MARKERS
 
-const contrastButton = document.getElementById("contrastButton");
-
-contrastButton.addEventListener("click", () => {
-  document.body.classList.toggle("high-contrast");
-
-  const enabled = document.body.classList.contains("high-contrast");
-
-  contrastButton.setAttribute("aria-pressed", String(enabled));
-
-  showToast(
-    enabled
-      ? "High contrast mode enabled."
-      : "High contrast mode disabled."
-  );
-});
-
-// ------------------------------------------
-// ACCESSIBILITY: LARGER TEXT
-// ------------------------------------------
-
-const textSizeButton = document.getElementById("textSizeButton");
-
-textSizeButton.addEventListener("click", () => {
-  document.body.classList.toggle("large-text");
-
-  const enabled = document.body.classList.contains("large-text");
-
-  textSizeButton.setAttribute("aria-pressed", String(enabled));
-
-  showToast(
-    enabled
-      ? "Larger text enabled."
-      : "Normal text size restored."
-  );
-});
-
-// ------------------------------------------
-// MOBILE NAVIGATION
-// ------------------------------------------
-
-const menuToggle = document.getElementById("menuToggle");
-const navLinks = document.getElementById("navLinks");
-
-menuToggle.addEventListener("click", () => {
-  const isOpen = navLinks.classList.toggle("open");
-
-  menuToggle.textContent = isOpen ? "✕" : "☰";
-  menuToggle.setAttribute("aria-expanded", String(isOpen));
-});
-
-navLinks.querySelectorAll("a").forEach(link => {
-  link.addEventListener("click", () => {
-    navLinks.classList.remove("open");
-    menuToggle.textContent = "☰";
-    menuToggle.setAttribute("aria-expanded", "false");
+document.querySelectorAll(".map-pin").forEach(pin => {
+  pin.addEventListener("keydown", event => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      pin.click();
+    }
   });
 });
 
-// ------------------------------------------
-// TOAST NOTIFICATIONS
-// ------------------------------------------
+// INITIAL MESSAGE
 
-function showToast(message) {
-  toast.textContent = message;
-  toast.classList.add("show");
-
-  if (lastToastTimer) {
-    clearTimeout(lastToastTimer);
-  }
-
-  lastToastTimer = setTimeout(() => {
-    toast.classList.remove("show");
-  }, 2800);
-}
-
-// ------------------------------------------
-// INITIAL PAGE SETUP
-// ------------------------------------------
-
-updateLiftDisplay();
-clearRouteMap();
-
-console.log("PathAble Accessible Campus Navigator loaded successfully.");
+console.log("PathAble loaded successfully!");
+console.log("This is a student demonstration prototype with sample campus data.");
